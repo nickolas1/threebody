@@ -19,12 +19,31 @@ function IntegratorIAS15(system) {
   //this.epsilon = 0;
   this.safetyFactor = 0.25;
   
+  this.maxDt = 1e300;
+  
   this.N = this.system.N;
   this.N3 = 3 * this.N;
   this.time = 0;
   
   this.lastSuccessfulDt = 0;
   this.dt = 0.01;
+  
+  this.minDt = 1e-12;
+  
+  var maxDt;
+  Object.defineProperty(this, "maxDt", {
+    get: function() {
+      return maxDt;
+    },
+    set: function(maxDtNew) {
+      maxDt = maxDtNew;
+      if (this.dt > maxDtNew) {
+        this.dt = maxDtNew;
+      }
+    },
+    enumerable: true,
+    configurable: true
+  });
   
   this.pos0 = Array.apply(null, new Array(this.N3)).map(Number.prototype.valueOf,0);
   this.vel0 = Array.apply(null, new Array(this.N3)).map(Number.prototype.valueOf,0);
@@ -52,14 +71,6 @@ IntegratorIAS15.prototype.integrationStep = function() {
     predictorCorrectorError = 1e300,
     predictorCorrectorErrorPrevious = 2,
     iterations = 0,
-    s = [0, 0, 0, 0, 0, 0, 0, 0],
-    xk,
-    tmp,
-    gk,
-    ak,
-    b6ktmp,
-    maxak,
-    maxb6ktmp,
     stepDone,
     dtLast,
     dtNew,
@@ -70,6 +81,8 @@ IntegratorIAS15.prototype.integrationStep = function() {
   //console.log("time: ",this.time, this.dt);
   
   this.system.calcAccels();
+  
+  this.copyBodiesToBodiesLast();
   
   this.copyBodiesToPosVelAcc(); 
   
@@ -84,156 +97,7 @@ IntegratorIAS15.prototype.integrationStep = function() {
     predictorCorrectorErrorPrevious = predictorCorrectorError;
     predictorCorrectorError = 0;
     iterations += 1;
-
-    // step through time interval using Gauss Radau steps
-    for (n = 1; n < 8; n += 1) {
-      s[0] = this.dt * this._hGR[n];
-      s[1] = s[0] * s[0] / 2;
-      s[2] = s[1] * this._hGR[n] / 3;
-			s[3] = s[2] * this._hGR[n] / 2;
-			s[4] = 3 * s[3] * this._hGR[n] / 5;
-			s[5] = 2 * s[4] * this._hGR[n] / 3;
-			s[6] = 5 * s[5] * this._hGR[n] / 7;
-			s[7] = 3 * s[6] * this._hGR[n] / 4;
-			s[8] = 7 * s[7] * this._hGR[n] / 9;
-		
-			stepTime = stepTimeStart + s[0];
-  
-      // predict body positions to substep n
-      for (i = 0; i < this.N; i += 1) {
-        for (k = 3*i; k < 3*i + 3; k += 1) {
-          xk = this.cspos[k] + (s[8]*this.b[6][k] + s[7]*this.b[5][k] + s[6]*this.b[4][k] + 
-            s[5]*this.b[3][k] + s[4]*this.b[2][k] + s[3]*this.b[1][k] + 
-            s[2]*this.b[0][k] + s[1]*this.acc0[k] + s[0]*this.vel0[k]);
-          
-          this.system.bodies[i].pos[k % 3] = this.pos0[k] + xk;
-        }
-      }
-
-      // calculate accelerations and copy to acc1
-      this.system.calcAccels();
-      for (i = 0; i < this.N; i++) {
-        this.acc1[3*i] = this.system.bodies[i].acc[0];
-        this.acc1[3*i + 1] = this.system.bodies[i].acc[1];
-        this.acc1[3*i + 2] = this.system.bodies[i].acc[2];
-      }
-            
-      switch (n) {
-        case 1:
-          for (k = 0; k < this.N3; k++) {
-            tmp = this.g[0][k];
-            gk = this.acc1[k] - this.acc0[k];
-            this.g[0][k]  = gk / this._r[0];
-            tmp = this.g[0][k] - tmp;
-            this.b[0][k] += tmp;
-          }
-          break;
-          
-        case 2:
-          for (k = 0; k < this.N3; k++) {
-            tmp = this.g[1][k];
-            gk = this.acc1[k] - this.acc0[k];
-						this.g[1][k] = (gk/this._r[1] - this.g[0][k])/this._r[2];
-						tmp = this.g[1][k] - tmp;
-						this.b[0][k] += tmp * this._c[0];
-						this.b[1][k] += tmp;
-					}
-					break;
-					
-        case 3:
-          for (k = 0; k < this.N3; k++) {
-            tmp = this.g[2][k];
-						gk = this.acc1[k] - this.acc0[k];
-						this.g[2][k] = ((gk/this._r[3] - this.g[0][k])/this._r[4] - 
-						  this.g[1][k])/this._r[5];
-						tmp = this.g[2][k] - tmp;
-						this.b[0][k] += tmp * this._c[1];
-						this.b[1][k] += tmp * this._c[2];
-						this.b[2][k] += tmp;
-					}
-					break;
-					
-        case 4:
-          for (k = 0; k < this.N3; k++) {
-            tmp = this.g[3][k];
-						gk = this.acc1[k] - this.acc0[k];
-						this.g[3][k] = (((gk/this._r[6] - this.g[0][k])/this._r[7] - 
-						  this.g[1][k])/this._r[8] - this.g[2][k])/this._r[9];
-						tmp = this.g[3][k] - tmp;
-						this.b[0][k] += tmp * this._c[3];
-						this.b[1][k] += tmp * this._c[4];
-						this.b[2][k] += tmp * this._c[5];
-						this.b[3][k] += tmp;
-					}
-					break;
-          
-        case 5:
-          for (k = 0; k < this.N3; k++) {
-            tmp = this.g[4][k];
-						gk = this.acc1[k] - this.acc0[k];
-						this.g[4][k] = ((((gk/this._r[10] - this.g[0][k])/this._r[11] - 
-						  this.g[1][k])/this._r[12] - this.g[2][k])/this._r[13] - 
-						  this.g[3][k])/this._r[14];
-						tmp = this.g[4][k] - tmp;
-						this.b[0][k] += tmp * this._c[6];
-						this.b[1][k] += tmp * this._c[7];
-						this.b[2][k] += tmp * this._c[8];
-						this.b[3][k] += tmp * this._c[9];
-						this.b[4][k] += tmp;
-					}
-					break;
-          
-        case 6:
-          for (k = 0; k < this.N3; k++) {
-            tmp = this.g[5][k];
-						gk = this.acc1[k] - this.acc0[k];
-            this.g[5][k] = (((((gk/this._r[15] - this.g[0][k])/this._r[16] - 
-              this.g[1][k])/this._r[17] - this.g[2][k])/this._r[18] - 
-              this.g[3][k])/this._r[19] - this.g[4][k])/this._r[20];
-						tmp = this.g[5][k] - tmp;
-						this.b[0][k] += tmp * this._c[10];
-						this.b[1][k] += tmp * this._c[11];
-						this.b[2][k] += tmp * this._c[12];
-						this.b[3][k] += tmp * this._c[13];
-						this.b[4][k] += tmp * this._c[14];
-						this.b[5][k] += tmp;
-          }
-          break;
-          
-        case 7:
-          maxak = 0;
-          maxb6ktmp = 0;
-          for (k = 0; k < this.N3; k++) {
-            tmp = this.g[6][k];
-						gk = this.acc1[k] - this.acc0[k];
-            this.g[6][k] = ((((((gk/this._r[21] - this.g[0][k])/this._r[22] - 
-              this.g[1][k])/this._r[23] - this.g[2][k])/this._r[24] - 
-              this.g[3][k])/this._r[25] - this.g[4][k])/this._r[26] - 
-              this.g[5][k])/this._r[27];
-						tmp = this.g[6][k] - tmp;	
-						this.b[0][k] += tmp * this._c[15];
-						this.b[1][k] += tmp * this._c[16];
-						this.b[2][k] += tmp * this._c[17];
-						this.b[3][k] += tmp * this._c[18];
-						this.b[4][k] += tmp * this._c[19];
-						this.b[5][k] += tmp * this._c[20];
-						this.b[6][k] += tmp;
-					
-            // track the change in b[6][k] to acc1[k]. converged when near 0
-            ak = Math.abs(this.acc1[k]);
-            if (ak) {
-              maxak = Math.max(ak, maxak);
-            }
-            b6ktmp = Math.abs(tmp); 
-            if (b6ktmp) {
-              maxb6ktmp = Math.max(b6ktmp, maxb6ktmp);
-            }
-          }
-					
-					predictorCorrectorError = maxb6ktmp / maxak;
-          break;
-      } // end switch(n)   
-    } //end for n=1 -> 8 gauss radau stepping
+    predictorCorrectorError = this.gaussRadauStepthroughInterval(stepTimeStart);
     stepDone = this.checkPredCorrBreaks(iterations, predictorCorrectorError, 
       predictorCorrectorErrorPrevious);
   } 
@@ -241,7 +105,7 @@ IntegratorIAS15.prototype.integrationStep = function() {
   //console.log("iterations: ",iterations);
   
   // set time to initial value, gets final update later
-  stepTime = stepTimeStart;
+  //stepTime = stepTimeStart;
   
   // find the next timestep
   dtLast = this.dt;
@@ -293,6 +157,202 @@ IntegratorIAS15.prototype.integrationStep = function() {
   ratio = this.dt / dtLast;
   this.predictNextBAndE(ratio);
   return 1;
+};
+
+IntegratorIAS15.prototype.gaussRadauStepthroughInterval = function(stepTimeStart) {
+  var tmp,
+    gk,
+    ak,
+    b6ktmp,
+    maxak,
+    maxb6ktmp,
+    predictorCorrectorError,
+    stepTime,
+    i, k, n; 
+  
+// step through time interval using Gauss Radau steps
+  for (n = 1; n < 8; n += 1) {
+   /* s[0] = this.dt * this._hGR[n];
+    s[1] = s[0] * s[0] / 2;
+    s[2] = s[1] * this._hGR[n] / 3;
+    s[3] = s[2] * this._hGR[n] / 2;
+    s[4] = 3 * s[3] * this._hGR[n] / 5;
+    s[5] = 2 * s[4] * this._hGR[n] / 3;
+    s[6] = 5 * s[5] * this._hGR[n] / 7;
+    s[7] = 3 * s[6] * this._hGR[n] / 4;
+    s[8] = 7 * s[7] * this._hGR[n] / 9;
+  
+    stepTime = stepTimeStart + s[0];
+
+    // predict body positions to substep n
+    for (i = 0; i < this.N; i += 1) {
+      for (k = 3*i; k < 3*i + 3; k += 1) {
+        xk = this.cspos[k] + (s[8]*this.b[6][k] + s[7]*this.b[5][k] + s[6]*this.b[4][k] + 
+          s[5]*this.b[3][k] + s[4]*this.b[2][k] + s[3]*this.b[1][k] + 
+          s[2]*this.b[0][k] + s[1]*this.acc0[k] + s[0]*this.vel0[k]);
+        
+        this.system.bodies[i].pos[k % 3] = this.pos0[k] + xk;
+      }
+    }*/
+    
+    // predictGaussRadauPositions returns the stepTime increment
+    //stepTime = stepTimeStart + this.predictGaussRadauPositions(n);
+    this.predictGaussRadauPositions(n);
+  
+    // calculate accelerations and copy to acc1
+    this.system.calcAccels();
+    for (i = 0; i < this.N; i += 1) {
+      this.acc1[3*i] = this.system.bodies[i].acc[0];
+      this.acc1[3*i + 1] = this.system.bodies[i].acc[1];
+      this.acc1[3*i + 2] = this.system.bodies[i].acc[2];
+    }
+          
+    switch (n) {
+      case 1:
+        for (k = 0; k < this.N3; k += 1) {
+          tmp = this.g[0][k];
+          gk = this.acc1[k] - this.acc0[k];
+          this.g[0][k]  = gk / this._r[0];
+          tmp = this.g[0][k] - tmp;
+          this.b[0][k] += tmp;
+        }
+        break;
+        
+      case 2:
+        for (k = 0; k < this.N3; k += 1) {
+          tmp = this.g[1][k];
+          gk = this.acc1[k] - this.acc0[k];
+          this.g[1][k] = (gk/this._r[1] - this.g[0][k])/this._r[2];
+          tmp = this.g[1][k] - tmp;
+          this.b[0][k] += tmp * this._c[0];
+          this.b[1][k] += tmp;
+        }
+        break;
+        
+      case 3:
+        for (k = 0; k < this.N3; k += 1) {
+          tmp = this.g[2][k];
+          gk = this.acc1[k] - this.acc0[k];
+          this.g[2][k] = ((gk/this._r[3] - this.g[0][k])/this._r[4] - 
+            this.g[1][k])/this._r[5];
+          tmp = this.g[2][k] - tmp;
+          this.b[0][k] += tmp * this._c[1];
+          this.b[1][k] += tmp * this._c[2];
+          this.b[2][k] += tmp;
+        }
+        break;
+        
+      case 4:
+        for (k = 0; k < this.N3; k += 1) {
+          tmp = this.g[3][k];
+          gk = this.acc1[k] - this.acc0[k];
+          this.g[3][k] = (((gk/this._r[6] - this.g[0][k])/this._r[7] - 
+            this.g[1][k])/this._r[8] - this.g[2][k])/this._r[9];
+          tmp = this.g[3][k] - tmp;
+          this.b[0][k] += tmp * this._c[3];
+          this.b[1][k] += tmp * this._c[4];
+          this.b[2][k] += tmp * this._c[5];
+          this.b[3][k] += tmp;
+        }
+        break;
+        
+      case 5:
+        for (k = 0; k < this.N3; k += 1) {
+          tmp = this.g[4][k];
+          gk = this.acc1[k] - this.acc0[k];
+          this.g[4][k] = ((((gk/this._r[10] - this.g[0][k])/this._r[11] - 
+            this.g[1][k])/this._r[12] - this.g[2][k])/this._r[13] - 
+            this.g[3][k])/this._r[14];
+          tmp = this.g[4][k] - tmp;
+          this.b[0][k] += tmp * this._c[6];
+          this.b[1][k] += tmp * this._c[7];
+          this.b[2][k] += tmp * this._c[8];
+          this.b[3][k] += tmp * this._c[9];
+          this.b[4][k] += tmp;
+        }
+        break;
+        
+      case 6:
+        for (k = 0; k < this.N3; k += 1) {
+          tmp = this.g[5][k];
+          gk = this.acc1[k] - this.acc0[k];
+          this.g[5][k] = (((((gk/this._r[15] - this.g[0][k])/this._r[16] - 
+            this.g[1][k])/this._r[17] - this.g[2][k])/this._r[18] - 
+            this.g[3][k])/this._r[19] - this.g[4][k])/this._r[20];
+          tmp = this.g[5][k] - tmp;
+          this.b[0][k] += tmp * this._c[10];
+          this.b[1][k] += tmp * this._c[11];
+          this.b[2][k] += tmp * this._c[12];
+          this.b[3][k] += tmp * this._c[13];
+          this.b[4][k] += tmp * this._c[14];
+          this.b[5][k] += tmp;
+        }
+        break;
+        
+      case 7:
+        maxak = 0;
+        maxb6ktmp = 0;
+        for (k = 0; k < this.N3; k += 1) {
+          tmp = this.g[6][k];
+          gk = this.acc1[k] - this.acc0[k];
+          this.g[6][k] = ((((((gk/this._r[21] - this.g[0][k])/this._r[22] - 
+            this.g[1][k])/this._r[23] - this.g[2][k])/this._r[24] - 
+            this.g[3][k])/this._r[25] - this.g[4][k])/this._r[26] - 
+            this.g[5][k])/this._r[27];
+          tmp = this.g[6][k] - tmp;	
+          this.b[0][k] += tmp * this._c[15];
+          this.b[1][k] += tmp * this._c[16];
+          this.b[2][k] += tmp * this._c[17];
+          this.b[3][k] += tmp * this._c[18];
+          this.b[4][k] += tmp * this._c[19];
+          this.b[5][k] += tmp * this._c[20];
+          this.b[6][k] += tmp;
+        
+          // track the change in b[6][k] to acc1[k]. converged when near 0
+          ak = Math.abs(this.acc1[k]);
+          if (ak) {
+            maxak = Math.max(ak, maxak);
+          }
+          b6ktmp = Math.abs(tmp); 
+          if (b6ktmp) {
+            maxb6ktmp = Math.max(b6ktmp, maxb6ktmp);
+          }
+        }
+        
+        predictorCorrectorError = maxb6ktmp / maxak;
+        break;
+    } // end switch(n)   
+  } //end for n=1 -> 8 gauss radau stepping
+  return predictorCorrectorError;
+};
+
+
+IntegratorIAS15.prototype.predictGaussRadauPositions = function(n) {
+  var s = [0, 0, 0, 0, 0, 0, 0, 0],
+    xk,
+    i, k;
+  
+  s[0] = this.dt * this._hGR[n];
+  s[1] = s[0] * s[0] / 2;
+  s[2] = s[1] * this._hGR[n] / 3;
+  s[3] = s[2] * this._hGR[n] / 2;
+  s[4] = 3 * s[3] * this._hGR[n] / 5;
+  s[5] = 2 * s[4] * this._hGR[n] / 3;
+  s[6] = 5 * s[5] * this._hGR[n] / 7;
+  s[7] = 3 * s[6] * this._hGR[n] / 4;
+  s[8] = 7 * s[7] * this._hGR[n] / 9;
+
+  // predict body positions to substep n
+  for (i = 0; i < this.N; i += 1) {
+    for (k = 3*i; k < 3*i + 3; k += 1) {
+      xk = this.cspos[k] + (s[8]*this.b[6][k] + s[7]*this.b[5][k] + s[6]*this.b[4][k] + 
+        s[5]*this.b[3][k] + s[4]*this.b[2][k] + s[3]*this.b[1][k] + 
+        s[2]*this.b[0][k] + s[1]*this.acc0[k] + s[0]*this.vel0[k]);
+      
+      this.system.bodies[i].pos[k % 3] = this.pos0[k] + xk;
+    }
+  }
+  return s[0];
 };
 
 
@@ -395,6 +455,7 @@ IntegratorIAS15.prototype.getIntegratorError = function() {
   var integratorError = 0,
     maxak = 0,
     maxb6k = 0,
+    ak, b6k,
     i,
     k,
     v2,
@@ -410,8 +471,19 @@ IntegratorIAS15.prototype.getIntegratorError = function() {
     
     // if acceleration is slowly changing, skip it
     if (Math.abs(v2 * this.dt * this.dt / r2) > 1e-16) {
-      maxak = Math.max.apply(null, this.acc1.slice(3*i, 3*i + 3).map(Math.abs));
-      maxb6k = Math.max.apply(null, this.b[6].slice(3*i, 3*i + 3).map(Math.abs));
+      //maxak = Math.max.apply(null, this.acc1.slice(3*i, 3*i + 3).map(Math.abs));
+      //maxb6k = Math.max.apply(null, this.b[6].slice(3*i, 3*i + 3).map(Math.abs));
+      // above looks nicer, below is way faster
+      for (k = 3*i; k < 3*i + 3; k += 1) {
+        ak = Math.abs(this.acc1[k]);
+        if (ak) {
+          maxak = Math.max(ak, maxak);
+        }
+        b6k = Math.abs(this.b[6][k]); 
+        if (b6k) {
+          maxb6k = Math.max(b6k, maxb6k);
+        }
+      }
     }  
   }
  
@@ -430,6 +502,16 @@ IntegratorIAS15.prototype.checkPredCorrBreaks = function(iterations, error, erro
     return true;
   } else {
     return false;
+  }
+};
+
+
+IntegratorIAS15.prototype.copyBodiesToBodiesLast = function() {
+  var i;
+  for (i = 0; i < this.N; i += 1) {
+    this.system.bodiesLast[i].pos = this.system.bodies[i].pos.slice(0);
+    this.system.bodiesLast[i].vel = this.system.bodies[i].vel.slice(0);
+    this.system.bodiesLast[i].acc = this.system.bodies[i].acc.slice(0);
   }
 };
 

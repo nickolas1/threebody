@@ -1,0 +1,24 @@
+// bower:scss
+// endbower    
+    
+#spatial-canvas {
+  background: $plot-background;
+}
+
+.nbody {
+ /* stroke: $body-outline;
+  stroke-width: 1px; */
+  
+  &.nbody-0 {
+    fill: $body-blue;
+  }
+
+  &.nbody-1 {
+    fill: $body-pink;
+  }
+
+  &.nbody-2 {
+    fill: $body-red;
+  }
+}
+

@@ -10,11 +10,60 @@ function System(N) {
     vel = this.generateVelocities(pos);
 
   this.bodies = Array.apply(null, new Array(N)).map(Number.prototype.valueOf,0);
+  this.bodiesLast = Array.apply(null, new Array(N)).map(Number.prototype.valueOf,0);
+  
+  this.timescale = 6.25;
   
   this.bodies.forEach(function (v, i, a) {
     a[i] = new Body(i, masses[i], pos[i], vel[i], [0, 0, 0]);
+  });
+  
+  this.bodiesLast.forEach(function (v, i, a) {
+    a[i] = new Body(i, 0, [0, 0, 0], [0, 0, 0], [0, 0, 0]);
   });  
+  
+  this.shape = [null, null, null]; // shape x, y ,r
+  this.shape = {"r": null, "x": null, "y": null};
+  this.calcTriangleSizeAndShape();
 }
+
+
+System.prototype.calcTriangleSizeAndShape = function() {
+  var r210 = 0,
+    r220 = 0,
+    r221 = 0,
+    dr,
+    m0 = this.bodies[0].mass,
+    m1 = this.bodies[1].mass,
+    m2 = this.bodies[2].mass,
+    k;
+    
+  for (k = 0; k < 3; k += 1) {
+    dr = this.bodies[1].pos[k] - this.bodies[0].pos[k];
+    r210 += dr * dr;
+    
+    dr = this.bodies[2].pos[k] - this.bodies[0].pos[k];
+    r220 += dr * dr;
+    
+    dr = this.bodies[2].pos[k] - this.bodies[1].pos[k];
+    r221 += dr * dr;
+  }
+  
+ // this.shape[2] = Math.sqrt((m1*m0*r210 + m2*m0*r220 + m2*m1*r221) / (m0+m1+m2));
+ // this.shape[0] = (r220 + r221 - 2*r210) / (r210 + r220 + r221);
+ // this.shape[1] = 1.73205081 * (r221 - r220) / (r210 + r220 + r221);
+  
+  //this.shape = {
+  //  "r": Math.sqrt((m1*m0*r210 + m2*m0*r220 + m2*m1*r221) / (m0+m1+m2)),
+  //  "x": (r220 + r221 - 2*r210) / (r210 + r220 + r221),
+  //  "y": 1.73205081 * (r221 - r220) / (r210 + r220 + r221)
+  //};
+  
+  this.shape.r = Math.sqrt((m1*m0*r210 + m2*m0*r220 + m2*m1*r221) / (m0+m1+m2));
+  this.shape.x = (r220 + r221 - 2*r210) / (r210 + r220 + r221);
+  this.shape.y = 1.73205081 * (r221 - r220) / (r210 + r220 + r221);
+  // 1.73205081 approx sqrt(3)
+};
 
 
 System.prototype.generateMasses = function() {
@@ -39,10 +88,11 @@ System.prototype.generatePositions = function() {
   
   positions[0] = [0.97000436, -0.24308753, 0];
   positions[1] = [-0.97000436, 0.24308753, 0];
-  positions[2] = [0, 0, 0]
+  positions[2] = [0, 0, 0];
   
   return positions;     
 };       
+
 
 System.prototype.generateVelocities = function(positions) {
   var velocities = Array.apply(null, new Array(this.N)).map(Number.prototype.valueOf,0);
@@ -51,11 +101,13 @@ System.prototype.generateVelocities = function(positions) {
   velocities[1] = [0, 0.8, 0];
   
   velocities[0] = [0.466203685, 0.43236573, 0];
+  //velocities[0] = [0.266203685, 0.43236573, 0];
   velocities[1] = [0.466203685, 0.43236573, 0];
   velocities[2] = [-0.93240737, -0.86473146, 0];
     
   return velocities;
 };
+
 
 System.prototype.calcCenterOfMomentum = function() {
   var cmPos = [0, 0, 0],
@@ -78,6 +130,7 @@ System.prototype.calcCenterOfMomentum = function() {
   this.centerOfMomentumVelocity = cmVel;   
 };
 
+
 System.prototype.calcKineticEnergy = function() {
   var ke = 0.0,
     v2,
@@ -93,6 +146,7 @@ System.prototype.calcKineticEnergy = function() {
   
   this.kineticEnergy = ke;
 };
+
 
 System.prototype.moveToCenterOfMomentum = function() {
   var k;
@@ -135,40 +189,52 @@ System.prototype.calcPotentialEnergy = function() {
     this.potentialEnergy = pot;
 };
 
+
 System.prototype.calcTotalEnergy = function() {
     this.calcKineticEnergy();
     this.calcPotentialEnergy();
     this.totalEnergy = this.kineticEnergy + this.potentialEnergy;
 };
 
+
 System.prototype.calcAccels = function() {
-    var i, j, k,
-        r2,
-        r3,
-        a,
-        dr = [0, 0, 0];
-    
-    // reset accels to 0
-    for (i = 0; i < this.N; i += 1) {
-      this.bodies[i].acc = [0, 0, 0];
-    }     
-    
-    // add pairwise force to each body
-    for (i = 0; i < this.N - 1; i += 1) {
-        for (j = i + 1; j < this.N; j += 1) {
-            r2 = 0;
-            for(k = 0; k < 3; k += 1){
-                dr[k] = this.bodies[j].pos[k] - this.bodies[i].pos[k];
-                r2 += dr[k] * dr[k];
-            }
-            r3 = r2 * Math.sqrt(r2);
-    
-            for(k = 0; k < 3; k += 1){
-                a = dr[k] / r3;
-                this.bodies[i].acc[k] += a * this.bodies[j].mass;
-                this.bodies[j].acc[k] -= a * this.bodies[i].mass;          
-            }             
-        }
+  var i, j, k,
+      r2,
+      r3,
+      a,
+      dr = [0, 0, 0],
+      mfaci,
+      mfacj,
+      bodiesi,
+      bodiesj;
+  
+  // reset accels to 0
+  for (i = 0; i < this.N; i += 1) {
+    this.bodies[i].acc = [0, 0, 0];
+  }   
+  
+  // add pairwise force to each body
+  for (i = 0; i < this.N - 1; i += 1) {
+    bodiesi = this.bodies[i];
+    for (j = i + 1; j < this.N; j += 1) {    
+    bodiesj = this.bodies[j];
+      dr = [
+          bodiesj.pos[0] - bodiesi.pos[0],
+          bodiesj.pos[1] - bodiesi.pos[1],
+          bodiesj.pos[2] - bodiesi.pos[2]
+        ];
+      r2 = dr[0]*dr[0] + dr[1]*dr[1] + dr[2]*dr[2];
+      r3 = r2 * Math.sqrt(r2);
+
+      mfaci = bodiesi.mass / r3;
+      mfacj = bodiesi.mass / r3;
+      bodiesi.acc[0] += dr[0] * mfacj;
+      bodiesi.acc[1] += dr[1] * mfacj;
+      bodiesi.acc[2] += dr[2] * mfacj;
+      bodiesj.acc[0] -= dr[0] * mfaci;
+      bodiesj.acc[1] -= dr[1] * mfaci;
+      bodiesj.acc[2] -= dr[2] * mfaci;      
     }
+  }
 };
 

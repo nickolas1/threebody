@@ -1,0 +1,40 @@
+// bower:scss
+// endbower    
+    
+#shape-canvas {
+  background: $page-background;
+}
+
+.shape-circle {
+  fill: $plot-background;
+  stroke: $shape-circle-outline;
+  stroke-width: 3px;
+}
+
+.shape-point, .shape-point-size {
+ /* stroke: $body-outline;
+  stroke-width: 1px; */
+  
+  fill: $shape-grey;
+}
+
+.shapeclue {
+  opacity: 0.7;
+  
+  &.shapeclue-0 {
+    fill: $body-blue;
+  }
+
+  &.shapeclue-1 {
+    fill: $body-pink;
+  }
+
+  &.shapeclue-2 {
+    fill: $body-red;
+  }
+}
+
+.shape-size-gauge {
+  stroke-width: 2px;
+  stroke: $shape-circle-outline;
+}

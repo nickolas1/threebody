@@ -3,6 +3,10 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
 
+@import "base/_base.scss";
+@import "modules/_body-plot.scss"; 
+@import "modules/_shape-plot.scss"; 
+
 .browsehappy {
   margin: 0.2em 0;
   background: #ccc;
