@@ -10,15 +10,46 @@
   stroke-width: 1px; */
   
   &.nbody-0 {
-    fill: $body-blue;
+    fill: $body-0;
   }
 
   &.nbody-1 {
-    fill: $body-pink;
+    fill: $body-1;
   }
 
   &.nbody-2 {
-    fill: $body-red;
+    fill: $body-2;
   }
 }
+
+.nbody-trail-0 {
+  fill: $body-0;
+  opacity: 0.8;
+}
+
+.nbody-trail-1 {
+  fill: $body-1;
+  opacity: 0.8;
+}
+
+.nbody-trail-2 {
+  fill: $body-2;
+  opacity: 0.8;
+}
+
+.play-control {
+  font-size: 2em;
+  opacity: 0.25;
+  
+  &.play-control-active {
+    opacity: 0.8;
+  }
+  
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+
+
 

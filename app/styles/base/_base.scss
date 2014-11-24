@@ -4,10 +4,37 @@
 $page-background: white;
 $plot-background: #f9f6e8;
 
-$body-blue: #5f69f8;
-$body-pink: #ef68ce;
-$body-red: #d86053;
+/* muted */
+$body-0: #5799f8;
+$body-1: #74a778;
+$body-2: #d86549;
+
+/* brighter */
+$body-0: #5799f8;
+$body-1: #f76140;
+$body-2: #72db79;
+
+
+
 $body-outline: #e6a170;
 
 $shape-grey: #595959;
-$shape-circle-outline: #f2eddc;
+$shape-circle-outline: #eee5d7;
+
+.input-group-sm {
+  line-height: 20px;
+  height: 20px;
+  .input-group-addon {
+    
+  }
+  > .form-control, > .input-group-addon {
+    height: 20px;
+    line-height: 0;
+  }
+}
+
+h4.plot-title {
+  font-weight: 600;
+  font-size: 2em;
+  opacity: 0.1;
+}

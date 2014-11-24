@@ -23,10 +23,6 @@ function IntegratorIAS15(system) {
   
   this.N = this.system.N;
   this.N3 = 3 * this.N;
-  this.time = 0;
-  
-  this.lastSuccessfulDt = 0;
-  this.dt = 0.01;
   
   this.minDt = 1e-12;
   
@@ -45,6 +41,18 @@ function IntegratorIAS15(system) {
     configurable: true
   });
   
+  this.clearIntegrator();
+  
+  this.setConstants();
+}
+
+IntegratorIAS15.prototype.clearIntegrator = function() {
+  this.time = 0;
+  this.lastSuccessfulDt = 0;
+  this.dt = 0.01;
+  
+  console.log("clearing integrator",this.time,this.lastSuccessfulDt);
+  
   this.pos0 = Array.apply(null, new Array(this.N3)).map(Number.prototype.valueOf,0);
   this.vel0 = Array.apply(null, new Array(this.N3)).map(Number.prototype.valueOf,0);
   this.acc0 = Array.apply(null, new Array(this.N3)).map(Number.prototype.valueOf,0);
@@ -58,9 +66,7 @@ function IntegratorIAS15(system) {
   this.updateResetArrays();
   
   this.initializeZeroArrays();
-  
-  this.setConstants();
-}
+};
 
 
 /* actual integration step. returns 1 if successful, 0 if unsuccessful
@@ -122,6 +128,11 @@ IntegratorIAS15.prototype.integrationStep = function() {
     // set floor
     if (dtNew < this.minDt) {
       dtNew = this.minDt;
+    }
+    
+    // set ceiling
+    if (dtNew > this.maxDt) {
+      dtNew = this.maxDt;
     }
     
     if (Math.abs(dtNew / dtLast) < this.safetyFactor) {

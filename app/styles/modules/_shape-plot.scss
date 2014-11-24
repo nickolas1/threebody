@@ -18,19 +18,24 @@
   fill: $shape-grey;
 }
 
+.shape-point-trail {
+  fill: $shape-grey;
+  opacity: 0.8;
+}
+
 .shapeclue {
   opacity: 0.7;
   
   &.shapeclue-0 {
-    fill: $body-blue;
+    fill: $body-0;
   }
 
   &.shapeclue-1 {
-    fill: $body-pink;
+    fill: $body-1;
   }
 
   &.shapeclue-2 {
-    fill: $body-red;
+    fill: $body-2;
   }
 }
 

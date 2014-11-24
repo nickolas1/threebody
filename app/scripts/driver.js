@@ -1,15 +1,16 @@
 /*jshint quotmark: double, unused: false*/
 "use strict";
-/*global Simulation */
+/*global d3,
+  Simulation */
 
-$(function() {
-    
+$(function() {   
   var stepMonitor;
   var system = new System(3);
   // log it to keep an eye on things in the console
   console.log(system);
   
   // set up the system here- presets, user defined, whatever
+  
   
   var simulation = new Simulation(system);
   
@@ -18,71 +19,68 @@ $(function() {
   simulation.initializeShapePlot();
   simulation.showShapeClues();
   
- /* // get things centered
-  system.moveToCenterOfMomentum();
-  
-  // grab initial energy
-  system.calcTotalEnergy();
-  var initialEnergy = system.totalEnergy;
-  
-  // get an integrator and inject the system
-  var integrator = new IntegratorIAS15(system);
-  console.log(integrator);
-  
-  
-  // set up timing
-  var timescale = system.timescale;
-  var tfinal = 100 * timescale;
-  var secondsPerTimescale = 3;
-  var fps = 20;
-  var dtAnimate = timescale / (secondsPerTimescale * fps);
-  var timeNextAnimate = dtAnimate;
-  integrator.maxDt = dtAnimate;
-  
-*/
-  var timelast = Date.now();
-  var timenow;
-  var timelast2 = Date.now();
-  var timenow2;
-  var deltaT;
-  
   var bodySelection = d3.selectAll(".nbody");
   var shapeSelection = d3.selectAll(".shape-point");
   var shapeSizeSelection = d3.selectAll(".shape-point-size");
-  console.log(bodySelection);
+  var bodySvg = d3.select("#bodies-trail-layer");
+  var shapeSvg = d3.select("#shape-layer");
+  
+  
+  simulation.populateInitialConditionsForm();
+  
   function integrateToNextFrame() {
-  //  timenow = Date.now()
-    simulation.transitionBodies(10, bodySelection);
-    simulation.transitionShapePoint(10, shapeSelection);
+    system.estimateDrawingTime(simulation.integrator.time, 
+      simulation.integrator.time - simulation.integrator.lastSuccessfulDt, 
+      simulation.timeNextAnimate);
+    simulation.transitionBodies(10, bodySelection, bodySvg);
+    simulation.transitionShapePoint(10, shapeSelection, shapeSvg);
     simulation.transitionShapePointSize(10, shapeSizeSelection);
     system.calcTriangleSizeAndShape();
-    
-  //  deltaT = timenow - timelast;
-  //  if (deltaT > 20) console.log(deltaT);
-  //  timelast = timenow;
-  //  console.log(simulation.system.bodies[0].pos);
+
+    simulation.timeNextAnimate += simulation.dtAnimate;
     do {
       stepMonitor = simulation.integrator.integrationStep();
     } while (simulation.integrator.time < simulation.timeNextAnimate);
-
-    simulation.timeNextAnimate += simulation.dtAnimate;
   }
 
- // var integrateTimer = setInterval(integrateToNextFrame, 1000/simulation.fps);
- 
+  var playControlPlay = $("#play-control-play");
+  var playControlPause = $("#play-control-pause");
+  var playControlReset = $("#play-control-reset");
+  var integrateTimer = null;
+  
+  // initial condition buttons
+  $("#ic-apply-button").click( function() {simulation.applyInitialConditionsForm();} );
+  $("#preset-ic-selector").change( function() {
+    simulation.choosePresetInitialConditions(this.value);
+  });
+  
+  
+  // time control buttons
+  playControlPlay.click( function() {
+    if (!playControlPlay.hasClass("play-control-active")) {
+      playControlPause.removeClass("play-control-active");
+      playControlPlay.addClass("play-control-active");
+      integrateTimer = setInterval(integrateToNextFrame, 1000/simulation.fps);
+    }
+  });
+  
+  playControlPause.click( function() {
+    if (!playControlPause.hasClass("play-control-active")) {
+      playControlPlay.removeClass("play-control-active");
+      playControlPause.addClass("play-control-active");
+      clearInterval(integrateTimer);
+    }
+  });
+  
+  playControlReset.click( function() {
+    if (playControlPlay.hasClass("play-control-active")) {
+      playControlPlay.removeClass("play-control-active");
+      playControlPause.addClass("play-control-active");
+      clearInterval(integrateTimer);
+    }
+    simulation.resetInitialConditions();
+  });
 
   
-  /*
-  var i = 0;
-  do {
-    stepMonitor = integrator.integrationStep();
-    if (integrator.time > timeNextAnimate) {
-      console.log(integrator.time, timeNextAnimate, integrator.dt);
-      timeNextAnimate += dtAnimate;
-    }
-  } while (integrator.time < tfinal)
-  */
-  simulation.system.calcTotalEnergy();
-  console.log("energy ",stepMonitor, simulation.system.totalEnergy,(simulation.initialEnergy - simulation.system.totalEnergy)/simulation.initialEnergy);
-  console.log("\n");
+ // var integrateTimer = setInterval(integrateToNextFrame, 1000/simulation.fps);
 });

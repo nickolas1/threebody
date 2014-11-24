@@ -30,19 +30,159 @@
         </ul>
         <h3 class="text-muted">threebody</h3>
       </div>
-
       
-      <div class="row ">
-        <div class="col-md-6">
+      <div class="row">
+        <div class="col-sm-6">
+          <span class="play-control">
+            <span class="glyphicon glyphicon-repeat" id="play-control-reset"></span>
+          </span>
+          <span class="play-control play-control-active" id="play-control-pause">
+            <span class="glyphicon glyphicon-pause"></span>
+          </span>
+          <span class="play-control" id="play-control-play">
+            <span class="glyphicon glyphicon-play"></span>
+          </span>
+        </div>
+      </div>
+      
+      
+      <div class="row">
+        <div class="col-sm-6">
+          <h4 class="plot-title">space</h4>
           <div id="spatial-canvas"></div>
         </div>
-        <div class="col-md-6">
+        <div class="col-sm-6">
+          <h4 class="plot-title">shape</h5>
           <div id="shape-canvas"></div>
         </div>
       </div>
-
+      
+      
+      <div class="row"><div class="col-sm-12">
+        <!--<form method="post">-->
+        
+          <div class="row">
+            <div class="col-sm-6">
+            <h4 class="plot-title">initial conditions</h4>
+            </div>
+            <div class="col-sm-6">
+              <select class="form-control" id="preset-ic-selector">
+                <option>figure 8</option>
+                <option>equilateral</option>
+                <option>something else</option>
+              </select> 
+            </div>
+          </div>
+            
+          <div class="row">  
+            <div class="col-sm-4">
+              <h5 class="body-title">body 1</h5>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">mass</span>
+                <input type="text" name="b0m" id="ic-b0m" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">x</span>
+                <input type="text" name="b0p0" id="ic-b0p0" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">y</span>
+                <input type="text" name="b0p1" id="ic-b0p1" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">z</span>
+                <input type="text" name="b0p2" id="ic-b0p2" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">vx</span>
+                <input type="text" name="b0v0" id="ic-b0v0" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">vy</span>
+                <input type="text" name="b0v1" id="ic-b0v1" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">vz</span>
+                <input type="text" name="b0v2" id="ic-b0v2" class="form-control">
+              </div>
+            </div>
+           
+            <div class="col-sm-4">
+              <h5 class="body-title">body 2</h5> 
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">mass</span>
+                <input type="text" name="b1m" id="ic-b1m" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">x</span>
+                <input type="text" name="b1p0" id="ic-b1p0" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">y</span>
+                <input type="text" name="b1p1" id="ic-b1p1" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">z</span>
+                <input type="text" name="b1p2" id="ic-b1p2" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">vx</span>
+                <input type="text" name="b1v0" id="ic-b1v0" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">vy</span>
+                <input type="text" name="b1v1" id="ic-b1v1" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">vz</span>
+                <input type="text" name="b1v2" id="ic-b1v2" class="form-control">
+              </div>
+            </div>
+   
+           
+            <div class="col-sm-4">
+              <h5 class="body-title">body 3</h5> 
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">mass</span>
+                <input type="text" name="b2m" id="ic-b2m" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">x</span>
+                <input type="text" name="b2p0" id="ic-b2p0" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">y</span>
+                <input type="text" name="b2p1" id="ic-b2p1" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">z</span>
+                <input type="text" name="b2p2" id="ic-b2p2" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">vx</span>
+                <input type="text" name="b2v0" id="ic-b2v0" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">vy</span>
+                <input type="text" name="b2v1" id="ic-b2v1" class="form-control">
+              </div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">vz</span>
+                <input type="text" name="b2v2" id="ic-b2v2" class="form-control">
+              </div>
+            </div>
+            
+          </div>
+          <div class="row">   
+            <div class="col-sm-4 col-sm-offset-8">
+              <input type="submit" value="apply" id="ic-apply-button">
+            </div
+          </div>
+        <!--</form>-->
+      </div></div> <!-- end col-sm-12, row -->
+    
       <div class="footer">
-        <p><span class="glyphicon glyphicon-heart"></span> from the Yeoman team</p>
+        <p>by Nick and Rick</p>
       </div>
 
     </div>
@@ -83,6 +223,7 @@
         <script src="scripts/integrator_leapfrog.js"></script>
         <script src="scripts/integrator_ias15.js"></script>
         <script src="scripts/simulation.js"></script>
+        <script src="scripts/simulation_initial_conditions.js"></script>
         <script src="scripts/driver.js"></script>
         <!-- endbuild -->
 </body>

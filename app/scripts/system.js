@@ -28,6 +28,37 @@ function System(N) {
 }
 
 
+
+System.prototype.estimateDrawingTime = function(timeNew, timeOld, timeTarget) {
+  var dt,
+    halfdt2,
+    bodies,
+    i, k;
+    
+  // figure out which of our two available times is closer to the target time
+  if (timeNew - timeTarget <= timeTarget - timeOld) {
+    dt = timeTarget - timeNew;
+    bodies = this.bodies;
+  }
+  else {
+    dt = timeTarget - timeOld;
+    bodies = this.bodiesLast;
+  }
+  halfdt2 = 0.5 *  dt * dt;
+
+  console.log(dt);
+  
+  for (i = 0; i < this.N; i += 1) {
+    for (k = 0; k < 3; k += 1) {
+      this.bodiesLast[i].pos[k] = 
+        bodies[i].pos[k] + 
+        bodies[i].vel[k] * dt + 
+        bodies[i].acc[k] * halfdt2;
+    }
+  }
+};
+
+
 System.prototype.calcTriangleSizeAndShape = function() {
   var r210 = 0,
     r220 = 0,
@@ -37,15 +68,16 @@ System.prototype.calcTriangleSizeAndShape = function() {
     m1 = this.bodies[1].mass,
     m2 = this.bodies[2].mass,
     k;
-    
+   
+  // since this is just used for plotting, use bodiesLast  
   for (k = 0; k < 3; k += 1) {
-    dr = this.bodies[1].pos[k] - this.bodies[0].pos[k];
+    dr = this.bodiesLast[1].pos[k] - this.bodiesLast[0].pos[k];
     r210 += dr * dr;
     
-    dr = this.bodies[2].pos[k] - this.bodies[0].pos[k];
+    dr = this.bodiesLast[2].pos[k] - this.bodiesLast[0].pos[k];
     r220 += dr * dr;
     
-    dr = this.bodies[2].pos[k] - this.bodies[1].pos[k];
+    dr = this.bodiesLast[2].pos[k] - this.bodiesLast[1].pos[k];
     r221 += dr * dr;
   }
   
@@ -86,9 +118,13 @@ System.prototype.generatePositions = function() {
   positions[0] = [0, 0, 0];
   positions[1] = [1, 0, 0];
   
-  positions[0] = [0.97000436, -0.24308753, 0];
-  positions[1] = [-0.97000436, 0.24308753, 0];
-  positions[2] = [0, 0, 0];
+  positions[0] = [0.97000436, -0.24308753, 1];
+  positions[1] = [-0.97000436, 0.24308753, 1];
+  positions[2] = [0, 0, 1];
+  
+  /*positions[0] = [-1, -2, 0];
+  positions[1] = [-1, 1, 0];
+  positions[2] = [0, 0, 0];*/
   
   return positions;     
 };       
@@ -101,9 +137,12 @@ System.prototype.generateVelocities = function(positions) {
   velocities[1] = [0, 0.8, 0];
   
   velocities[0] = [0.466203685, 0.43236573, 0];
-  //velocities[0] = [0.266203685, 0.43236573, 0];
   velocities[1] = [0.466203685, 0.43236573, 0];
   velocities[2] = [-0.93240737, -0.86473146, 0];
+    
+/*  velocities[0] = [0.466203685, 0.43236573, 0];
+  velocities[1] = [0.466203685, 0.43236573, 0];
+  velocities[2] = [-0.93240737, -0.86473146, 0];*/ 
     
   return velocities;
 };
@@ -121,6 +160,7 @@ System.prototype.calcCenterOfMomentum = function() {
   
   this.bodies.forEach(function (v) {
     for(k = 0; k < 3; k += 1){
+      console.log(v.mass, v.pos[k],totalMass);
       cmPos[k] += v.mass * v.pos[k] / totalMass;
       cmVel[k] += v.mass * v.vel[k] / totalMass;
     }
@@ -128,6 +168,7 @@ System.prototype.calcCenterOfMomentum = function() {
   
   this.centerOfMomentumPosition = cmPos;
   this.centerOfMomentumVelocity = cmVel;   
+  console.log(cmPos, cmVel);
 };
 
 
@@ -227,7 +268,7 @@ System.prototype.calcAccels = function() {
       r3 = r2 * Math.sqrt(r2);
 
       mfaci = bodiesi.mass / r3;
-      mfacj = bodiesi.mass / r3;
+      mfacj = bodiesj.mass / r3;
       bodiesi.acc[0] += dr[0] * mfacj;
       bodiesi.acc[1] += dr[1] * mfacj;
       bodiesi.acc[2] += dr[2] * mfacj;
