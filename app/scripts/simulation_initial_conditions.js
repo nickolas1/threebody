@@ -8,10 +8,17 @@ Simulation.prototype.choosePresetInitialConditions = function(choice) {
   if (choice === "figure 8") {
     this.setFigureEight();
   }
-  else if (choice === "equilateral") {
-    this.setEquilateral();
+  else if (choice === "equilateral, equal masses") {
+    this.setEquilateralUnstable();
   }
-  
+  else if (choice === "equilateral, star-planet-planet") {
+    this.setEquilateralStable();
+  }
+    else if (choice === "Pythagorean") {
+    this.setPythagorean();
+  }
+ 
+  this.activatePresetInitialConditions();
 };
 
 Simulation.prototype.setFigureEight = function() {
@@ -29,29 +36,80 @@ Simulation.prototype.setFigureEight = function() {
   bodies[2].pos = [0, 0, 0];
   bodies[2].vel = [-0.93240737, -0.86473146, 0];
   
-  this.activateInitialConditions();
+  this.setSpatialPlotDomain(3);
 };
 
-Simulation.prototype.setEquilateral = function() {
-  var bodies = this.system.bodies;
+Simulation.prototype.setEquilateralStable = function() {
+  var bodies = this.system.bodies,
+    scale;
+  
+  bodies[0].mass = 50;
+  bodies[1].mass = 1;
+  bodies[2].mass = 0.1;
+  
+  // set bodies up at equilateral triangle
+  bodies[0].pos = [Math.cos(0), Math.sin(0), 0];
+  bodies[1].pos = [Math.cos(2 * Math.PI / 3), Math.sin(2 * Math.PI / 3), 0];
+  bodies[2].pos = [Math.cos(-2 * Math.PI / 3), Math.sin(-2 * Math.PI / 3), 0];
+  
+  // move to center of mass (don't worry about velocity translation, it will be undone */
+  this.system.moveToCenterOfMomentum();
+  scale = 3;
+  bodies[0].vel = [-scale * bodies[0].pos[1], scale * bodies[0].pos[0], 0];
+  bodies[1].vel = [-scale * bodies[1].pos[1], scale * bodies[1].pos[0], 0];
+  bodies[2].vel = [-scale * bodies[2].pos[1], scale * bodies[2].pos[0], 0];
+  
+  this.setSpatialPlotDomain(5);
+};
+
+Simulation.prototype.setEquilateralUnstable = function() {
+  var bodies = this.system.bodies,
+    angle,
+    scale;
   
   bodies[0].mass = 1;
-  bodies[0].pos = [-1, -2, 0];
-  bodies[0].vel = [0.466203685, 0.43236573, 0];
-  
   bodies[1].mass = 1;
-  bodies[1].pos = [-1, 1, 0];
-  bodies[1].vel = [0.466203685, 0.43236573, 0];
-
   bodies[2].mass = 1;
-  bodies[2].pos = [0, 0, 0];
-  bodies[2].vel = [-0.93240737, -0.86473146, 0];
   
-  this.activateInitialConditions();
+  // set bodies up at equilateral triangle
+  bodies[0].pos = [Math.cos(0), Math.sin(0), 0];
+  bodies[1].pos = [Math.cos(2 * Math.PI / 3), Math.sin(2 * Math.PI / 3), 0];
+  bodies[2].pos = [Math.cos(-2 * Math.PI / 3), Math.sin(-2 * Math.PI / 3), 0];
+  
+  // move to center of mass (don't worry about velocity translation, it will be undone */
+  this.system.moveToCenterOfMomentum();
+  
+  scale = 0.5;
+  bodies[0].vel = [-scale * bodies[0].pos[1], scale * bodies[0].pos[0], 0];
+  bodies[1].vel = [-scale * bodies[1].pos[1], scale * bodies[1].pos[0], 0];
+  bodies[2].vel = [-scale * bodies[2].pos[1], scale * bodies[2].pos[0], 0];
+  
+  this.setSpatialPlotDomain(5);
+};
+
+Simulation.prototype.setPythagorean = function() {
+  var bodies = this.system.bodies,
+    angle,
+    scale;
+  
+  bodies[0].mass = 3;
+  bodies[1].mass = 4;
+  bodies[2].mass = 5;
+  
+  // set bodies up at pythagorean triangle
+  bodies[0].pos = [1, 3, 0];
+  bodies[1].pos = [-2, -1, 0];
+  bodies[2].pos = [1, -1, 0];
+  
+  bodies[0].vel = [0, 0, 0];
+  bodies[1].vel = [0, 0, 0];
+  bodies[2].vel = [0, 0, 0];
+
+  this.setSpatialPlotDomain(15);
 };
 
 
-Simulation.prototype.activateInitialConditions = function() {
+Simulation.prototype.activatePresetInitialConditions = function() {
   this.populateInitialConditionsForm();
   this.resetInitialConditions();
 };
@@ -60,6 +118,10 @@ Simulation.prototype.resetInitialConditions = function() {
   this.integrator.clearIntegrator();
   this.timeNextAnimate = 0;
   this.applyInitialConditionsForm();
+  this.system.calcTotalEnergy();
+  this.system.initialEnergy = this.system.totalEnergy;
+  this.system.calcTimescale(); 
+  this.calcDtAnimate();
 };
 
 

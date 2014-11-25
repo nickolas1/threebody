@@ -14,6 +14,9 @@ function Simulation(system) {
   this.system.calcTotalEnergy();
   this.initialEnergy = system.totalEnergy;
   
+  // find timescale
+  this.system.calcTimescale();
+  
   // get an integrator and inject the system
   this.integrator = new IntegratorIAS15(this.system);
   // use integrator method to setup bodiesLast, then get system shape
@@ -26,8 +29,8 @@ function Simulation(system) {
   this.tfinal = 100 * this.system.timescale;
   this.secondsPerTimescale = 5;
   this.fps = 24;
-  this.dtAnimate = this.system.timescale / (this.secondsPerTimescale * this.fps);
-  
+  this.calcDtAnimate();
+
   this.timeNextAnimate = this.dtAnimate;
   this.integrator.maxDt = this.dtAnimate;
   
@@ -59,6 +62,15 @@ function Simulation(system) {
   
 }
 
+Simulation.prototype.setSpeed = function(newSpeed) {
+  this.secondsPerTimescale = newSpeed;
+  this.calcDtAnimate();
+};
+
+Simulation.prototype.calcDtAnimate = function() {
+  this.dtAnimate = this.system.timescale / (this.secondsPerTimescale * this.fps);
+  console.log(this.system.timescale, this.dtAnimate);
+};
 
 Simulation.prototype.setPlotSizes = function() {
   console.log("resizing");
@@ -93,6 +105,21 @@ Simulation.prototype.setPlotSizes = function() {
           .range([this.h, 0]);
 };
 
+
+Simulation.prototype.setSpatialPlotDomain = function(newRange) {
+  var xrange = newRange,
+    yrange = xrange * this.h / this.w;
+    
+  this.xSpatial.domain([-xrange/2, xrange/2]);
+  this.ySpatial.domain([-yrange/2, yrange/2]);
+  
+  this.spatialPlotRange = newRange;
+  
+  this.refreshSpatialPlot();
+  console.log("setting range ",this.spatialPlotRange);
+};
+
+
 Simulation.prototype.initializeSpatialPlot = function() {
   var xrange,
     yrange,
@@ -103,7 +130,7 @@ Simulation.prototype.initializeSpatialPlot = function() {
   var bodies = this.system.bodiesLast;
 
   // create the svg representation of the bodies
-  xrange = 50;
+  xrange = 15;
   yrange = xrange * this.h / this.w;
 
   x.domain([-xrange/2, xrange/2]);
@@ -294,8 +321,6 @@ Simulation.prototype.initializeSvgLayers = function() {
       
   shapeSvg.append("g") // shape point layer
       .attr("id", "shape-layer");
-      
-    
 };
 
 
@@ -350,6 +375,19 @@ Simulation.prototype.transitionBodies = function(duration, bodyselection, svg) {
       .style("opacity", 0)
     .remove();  
   }
+};
+
+Simulation.prototype.refreshSpatialPlot = function() {
+  var x = this.xSpatial,
+    y = this.ySpatial,
+    sel = d3.selectAll(".nbody, .nbody-trail");
+    
+  d3.selectAll(".nbody")
+    .attr("cx", function(d) { return x(d.pos[0]); })
+    .attr("cy", function(d) { return y(d.pos[1]); });
+  d3.selectAll(".nbody-trail-0, .nbody-trail-1, .nbody-trail-2")
+    .attr("cx", function(d) { return x(d.pos[0]); })
+    .attr("cy", function(d) { return y(d.pos[1]); });
 };
 
 Simulation.prototype.transitionBodies2 = function(duration, bodyselection, svg) {

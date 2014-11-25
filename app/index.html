@@ -43,12 +43,43 @@
             <span class="glyphicon glyphicon-play"></span>
           </span>
         </div>
+
+        <div class="col-sm-6">
+          <select class="form-control ic-selector" id="preset-ic-selector">
+            <optgroup label="stable">
+              <option>figure 8</option>
+              <option>equilateral, star-planet-planet</option>
+            </optgroup>
+            <optgroup label="unstable">
+              <option>equilateral, equal masses</option>
+              <option>Pythagorean</option>
+            </optgroup>
+          </select> 
+          <span class="caret ic-selector-caret"></span>
+        </div>
+
       </div>
       
       
       <div class="row">
         <div class="col-sm-6">
-          <h4 class="plot-title">space</h4>
+          <div class="row">
+            <div class="col-xs-4">
+              <h4 class="plot-title">space</h4>
+            </div>
+            <div class="col-xs-2">
+              <img class="turtle speed-control" id="speed-control-slow" src="images/turtle.png">
+            </div>
+            <div class="col-xs-2">
+              <img class="turtle speed-control" id="speed-control-fast" src="images/rabbit.png">
+            </div>
+            <div class="col-xs-2">
+              <span class="glyphicon glyphicon-minus-sign zoom-control pull-right" id="zoom-control-out"></span>
+            </div>
+            <div class="col-xs-2">
+              <span class="glyphicon glyphicon-plus-sign zoom-control" id="zoom-control-in"></span>
+            </div>
+          </div>
           <div id="spatial-canvas"></div>
         </div>
         <div class="col-sm-6">
@@ -65,14 +96,19 @@
             <div class="col-sm-6">
             <h4 class="plot-title">initial conditions</h4>
             </div>
-            <div class="col-sm-6">
+          <!--  <div class="col-sm-6">
               <select class="form-control" id="preset-ic-selector">
-                <option>figure 8</option>
-                <option>equilateral</option>
-                <option>something else</option>
+                <optgroup label="stable">
+                  <option>figure 8</option>
+                  <option>equilateral, star-planet-planet</option>
+                </optgroup>
+                <optgroup label="unstable">
+                  <option>equilateral, equal masses</option>
+                  <option>Pythagorean</option>
+                </optgroup>
               </select> 
-            </div>
-          </div>
+            </div> -->
+          </div> 
             
           <div class="row">  
             <div class="col-sm-4">

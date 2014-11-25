@@ -14,8 +14,12 @@ function System(N) {
   
   this.timescale = 6.25;
   
-  this.bodies.forEach(function (v, i, a) {
+  /*this.bodies.forEach(function (v, i, a) {
     a[i] = new Body(i, masses[i], pos[i], vel[i], [0, 0, 0]);
+  });*/
+  
+  this.bodies.forEach(function (v, i, a) {
+    a[i] = new Body(i, i, [i, i, i], [i, i, i], [0, 0, 0]);
   });
   
   this.bodiesLast.forEach(function (v, i, a) {
@@ -24,9 +28,37 @@ function System(N) {
   
   this.shape = [null, null, null]; // shape x, y ,r
   this.shape = {"r": null, "x": null, "y": null};
-  this.calcTriangleSizeAndShape();
+ // this.calcTriangleSizeAndShape();
+  
+  this.initialEnergy = null;
+  this.angularMomentum = [null, null, null];
 }
 
+
+System.prototype.calcTimescale = function() {
+  var rMean,
+    density,
+    totalMass,
+    r2,
+    i,
+    k;
+    
+  rMean = 0;
+  totalMass = 0;
+  for (i = 0; i < this.N; i += 1) {
+    r2 = 0;
+    for (k = 0; k < 3; k += 1) {
+      r2 += this.bodies[i].pos[0] * this.bodies[i].pos[0];
+    }
+   // rMean += Math.sqrt(r2);
+    rMean = Math.max(rMean, Math.sqrt(r2));
+    totalMass += this.bodies[i].mass;
+  }
+  
+ // rMean /= this.N;
+  density = totalMass / Math.pow(rMean, 3);
+  this.timescale = 5/Math.sqrt(density);
+};
 
 
 System.prototype.estimateDrawingTime = function(timeNew, timeOld, timeTarget) {
@@ -45,8 +77,6 @@ System.prototype.estimateDrawingTime = function(timeNew, timeOld, timeTarget) {
     bodies = this.bodiesLast;
   }
   halfdt2 = 0.5 *  dt * dt;
-
-  console.log(dt);
   
   for (i = 0; i < this.N; i += 1) {
     for (k = 0; k < 3; k += 1) {
@@ -168,17 +198,16 @@ System.prototype.calcCenterOfMomentum = function() {
   
   this.centerOfMomentumPosition = cmPos;
   this.centerOfMomentumVelocity = cmVel;   
-  console.log(cmPos, cmVel);
 };
 
 
 System.prototype.calcKineticEnergy = function() {
-  var ke = 0.0,
+  var ke = 0,
     v2,
     k;
   
   this.bodies.forEach(function (v) {    
-    v2 = 0.0;
+    v2 = 0;
     for(k = 0; k < 3; k += 1){
       v2 = v2 + v.vel[k] * v.vel[k];
     }
@@ -207,34 +236,46 @@ System.prototype.moveToCenterOfMomentum = function() {
 
 
 System.prototype.calcPotentialEnergy = function() {
-    var dr = [0, 0, 0],
-        r2,
-        pot = 0,
-        posi,
-        mi,
-        posj,
-        mj,
-        i, j, k;
-    
-    for (i = 0; i < this.N - 1; i += 1) {
-        for (j = i + 1; j < this.N; j += 1) {
-            //get the potential contribution from each pair
-            r2 = 0;
-            for(k = 0; k < 3; k += 1){
-                dr[k] = this.bodies[j].pos[k] - this.bodies[i].pos[k];
-                r2 += dr[k] * dr[k];
-            }
-            pot -= this.bodies[i].mass * this.bodies[j].mass / Math.sqrt(r2);  
-        }
+  var dr = [0, 0, 0],
+    r2,
+    pot = 0,
+    posi,
+    mi,
+    posj,
+    mj,
+    i, j, k;
+  
+  for (i = 0; i < this.N - 1; i += 1) {
+    for (j = i + 1; j < this.N; j += 1) {
+      //get the potential contribution from each pair
+      r2 = 0;
+      for(k = 0; k < 3; k += 1){
+        dr[k] = this.bodies[j].pos[k] - this.bodies[i].pos[k];
+        r2 += dr[k] * dr[k];
+      }
+      pot -= this.bodies[i].mass * this.bodies[j].mass / Math.sqrt(r2);  
     }
-    this.potentialEnergy = pot;
+  }
+  this.potentialEnergy = pot;
 };
 
 
 System.prototype.calcTotalEnergy = function() {
-    this.calcKineticEnergy();
-    this.calcPotentialEnergy();
-    this.totalEnergy = this.kineticEnergy + this.potentialEnergy;
+  this.calcKineticEnergy();
+  this.calcPotentialEnergy();
+  this.totalEnergy = this.kineticEnergy + this.potentialEnergy;
+};
+
+System.prototype.calcAngularMomentum = function() {
+  var i,
+    b = this.bodies;
+  
+  this.angularMomentum = [0, 0, 0];
+  for (i = 0; i < this.N; i += 1) {
+    this.angularMomentum[0] += b[i].mass * (b[i].pos[1] * b[i].vel[2] - b[i].pos[2] * b[i].vel[1]);
+    this.angularMomentum[1] += b[i].mass * (b[i].pos[2] * b[i].vel[0] - b[i].pos[0] * b[i].vel[2]);
+    this.angularMomentum[2] += b[i].mass * (b[i].pos[0] * b[i].vel[1] - b[i].pos[1] * b[i].vel[0]);
+  }
 };
 
 

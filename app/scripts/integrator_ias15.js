@@ -131,9 +131,10 @@ IntegratorIAS15.prototype.integrationStep = function() {
     }
     
     // set ceiling
-    if (dtNew > this.maxDt) {
-      dtNew = this.maxDt;
-    }
+    //if (dtNew > this.maxDt) {
+    //  console.log("CEILING",dtNew,this.maxDt);
+    //  dtNew = this.maxDt;
+    //}
     
     if (Math.abs(dtNew / dtLast) < this.safetyFactor) {
     //new timestep is a lot smaller than the last one

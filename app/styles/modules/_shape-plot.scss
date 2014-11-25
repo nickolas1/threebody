@@ -43,3 +43,32 @@
   stroke-width: 2px;
   stroke: $shape-circle-outline;
 }
+
+.ic-selector {
+  box-shadow: none;
+  border: 0;
+ /* border-radius: 0px;*/
+ 
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: 1px solid rgba($control-color, 0.25);  
+  outline-offset:-1px;
+  
+  &:focus {
+    box-shadow: none;
+    outline: 1px solid rgba($control-color, 0.25); 
+    outline-offset:-1px;
+  }
+}
+
+.ic-selector-caret {
+  position: absolute;
+  right: 30px;
+  top: 15px;
+  opacity: 0.4;
+  
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-top: 9px solid #000000;
+}

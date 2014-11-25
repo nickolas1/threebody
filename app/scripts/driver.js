@@ -18,6 +18,7 @@ $(function() {
   simulation.initializeSpatialPlot();
   simulation.initializeShapePlot();
   simulation.showShapeClues();
+  simulation.choosePresetInitialConditions("figure 8");
   
   var bodySelection = d3.selectAll(".nbody");
   var shapeSelection = d3.selectAll(".shape-point");
@@ -27,6 +28,9 @@ $(function() {
   
   
   simulation.populateInitialConditionsForm();
+  
+  system.calcAngularMomentum();
+  var L0 = system.angularMomentum.slice(0);
   
   function integrateToNextFrame() {
     system.estimateDrawingTime(simulation.integrator.time, 
@@ -38,14 +42,25 @@ $(function() {
     system.calcTriangleSizeAndShape();
 
     simulation.timeNextAnimate += simulation.dtAnimate;
-    do {
+    while (simulation.integrator.time < simulation.timeNextAnimate) {
       stepMonitor = simulation.integrator.integrationStep();
-    } while (simulation.integrator.time < simulation.timeNextAnimate);
+    }
+    /*do {
+      stepMonitor = simulation.integrator.integrationStep();
+    } while (simulation.integrator.time < simulation.timeNextAnimate);*/
+   /* system.calcTotalEnergy();
+    console.log("energy ",(system.totalEnergy - system.initialEnergy) / system.initialEnergy);*/
+    system.calcAngularMomentum();
+    //console.log(system.angularMomentum,L0[0]-system.angularMomentum[0],L0[1]-system.angularMomentum[1],L0[2]-system.angularMomentum[2]);
   }
 
   var playControlPlay = $("#play-control-play");
   var playControlPause = $("#play-control-pause");
   var playControlReset = $("#play-control-reset");
+  var zoomControlIn = $("#zoom-control-in");
+  var zoomControlOut = $("#zoom-control-out");
+  var speedControlSlow = $("#speed-control-slow");
+  var speedControlFast = $("#speed-control-fast");
   var integrateTimer = null;
   
   // initial condition buttons
@@ -70,6 +85,8 @@ $(function() {
       playControlPause.addClass("play-control-active");
       clearInterval(integrateTimer);
     }
+    console.log(system.bodies);
+    console.log(system.bodiesLast);
   });
   
   playControlReset.click( function() {
@@ -79,6 +96,27 @@ $(function() {
       clearInterval(integrateTimer);
     }
     simulation.resetInitialConditions();
+    system.calcAngularMomentum();
+    L0 = system.angularMomentum.slice(0);
+    console.log(L0);
+  });
+  
+  // zoom control buttons
+  zoomControlIn.click( function() {
+    simulation.setSpatialPlotDomain(simulation.spatialPlotRange / 1.8);
+  });
+  
+  zoomControlOut.click( function() {
+    simulation.setSpatialPlotDomain(simulation.spatialPlotRange * 1.8);
+  });
+  
+    // speed control buttons
+  speedControlSlow.click( function() {
+    simulation.setSpeed(simulation.secondsPerTimescale * 1.8);
+  });
+  
+  speedControlFast.click( function() {
+    simulation.setSpeed(simulation.secondsPerTimescale / 1.8);
   });
 
   
