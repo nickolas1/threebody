@@ -1,5 +1,4 @@
-// bower:scss
-// endbower    
+    
     
 #shape-canvas {
   background: $page-background;
@@ -42,6 +41,12 @@
 .shape-size-gauge {
   stroke-width: 2px;
   stroke: $shape-circle-outline;
+}
+
+.shape-size-clue {
+  fill: $shape-circle-outline;
+  stroke: none;
+  font-size: 1.4em;
 }
 
 .ic-selector {

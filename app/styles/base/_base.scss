@@ -1,5 +1,4 @@
-// bower:scss
-// endbower  
+
 
 $page-background: white;
 $plot-background: #f9f6e8;
@@ -15,23 +14,62 @@ $body-1: #f76140;
 $body-2: #72db79;
 
 
-
 $body-outline: #e6a170;
 
 $shape-grey: #595959;
 $shape-circle-outline: #eee5d7;
 
+/* brightest */
+$body-0: #46c5f8;
+$body-1: #d93d7f;
+$body-2: #47d135;
+$plot-background: #fafafa;
+$shape-circle-outline: #d2d1d3;
+
 $control-color: black;
 
 .input-group-sm {
-  line-height: 20px;
-  height: 20px;
-  .input-group-addon {
-    
-  }
+  line-height: 25px;
+  height: 25px;
+
   > .form-control, > .input-group-addon {
-    height: 20px;
+    height: 25px;
     line-height: 0;
+    
+    border-radius: 0px;
+    box-shadow: none;
+    
+    color: #595959;
+    
+    &.fixed-width {
+      width: 3.5em;
+      padding: 5px;
+    }
+    
+    &.body-1 {
+      color: $body-0;
+      background-color: rgba($body-0, 0.05);
+      border-color: rgba($body-0, 0.2);
+    }
+    &.body-2 {
+      color: $body-1;
+      background-color: rgba($body-1, 0.05);
+      border-color: rgba($body-1, 0.2);
+    }
+    &.body-3 {
+      color: $body-2;
+      background-color: rgba($body-2, 0.05);
+      border-color: rgba($body-2, 0.2);
+    }
+    &.body-1-input {
+      border-color: rgba($body-0, 0.2);
+    }
+    &.body-2-input {
+      border-color: rgba($body-1, 0.2);
+    }
+    &.body-3-input {
+      border-color: rgba($body-2, 0.2);
+    }
   }
 }
 
@@ -39,4 +77,20 @@ h4.plot-title {
   font-weight: 600;
   font-size: 2em;
   opacity: 0.1;
+}
+
+h5.body-title {
+  opacity: 0.7;
+}
+
+.body-title-1 {
+  color: $body-0;
+}
+
+.body-title-2 {
+  color: $body-1;
+}
+
+.body-title-3 {
+  color: $body-2;
 }

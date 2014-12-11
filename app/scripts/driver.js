@@ -45,6 +45,8 @@ $(function() {
     while (simulation.integrator.time < simulation.timeNextAnimate) {
       stepMonitor = simulation.integrator.integrationStep();
     }
+    console.log(simulation.integrator.time, simulation.timeNextAnimate, simulation.dtAnimate);
+    console.log(system.bodies[0].pos,system.bodiesLast[0].pos);
     /*do {
       stepMonitor = simulation.integrator.integrationStep();
     } while (simulation.integrator.time < simulation.timeNextAnimate);*/

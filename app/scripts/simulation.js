@@ -65,6 +65,7 @@ function Simulation(system) {
 Simulation.prototype.setSpeed = function(newSpeed) {
   this.secondsPerTimescale = newSpeed;
   this.calcDtAnimate();
+  console.log(this.time, this.dtAnimate, this.timeNextAnimate);
 };
 
 Simulation.prototype.calcDtAnimate = function() {
@@ -127,7 +128,7 @@ Simulation.prototype.initializeSpatialPlot = function() {
     y = this.ySpatial;
 
     
-  var bodies = this.system.bodiesLast;
+  var bodies = this.system.bodiesPlot;
 
   // create the svg representation of the bodies
   xrange = 15;
@@ -161,7 +162,7 @@ Simulation.prototype.initializeShapePlot = function() {
   yrange = 2.1;
   xrange = yrange * this.w / this.h;
 
-  x.domain([-xrange/2, xrange/2]);
+  x.domain([-5*xrange/12, 7*xrange/12]);
   y.domain([-yrange/2, yrange/2]);
   
   // plot background and the shape point
@@ -181,15 +182,15 @@ Simulation.prototype.initializeShapePlot = function() {
   // size temperature gauge and size point
   yT.domain([-0.05, 1.05]);
   d3.select("#shape-layer").append("line")
-    .attr("x1", x(1.2))
-    .attr("x2", x(1.2))
+    .attr("x1", x(1.25))
+    .attr("x2", x(1.25))
     .attr("y1", yT(0))
     .attr("y2", yT(1))
     .attr("class", "shape-size-gauge");
   
   d3.select("#shape-layer").append("circle")
     .datum(shape)
-    .attr("cx", function(d) { return x(1.2); })
+    .attr("cx", function(d) { return x(1.25); })
     .attr("cy", function(d) { return yT(d.r / (1 + d.r)); })
     .attr("r", 6)
     .attr("class", "shape-point-size");
@@ -201,6 +202,7 @@ Simulation.prototype.showShapeClues = function() {
     yrange,
     x = this.xShape,
     y = this.yShape,
+    yT = this.yShapeThermometer,
     angle,
     pairAngleSpread,
     rOuter,
@@ -296,6 +298,18 @@ Simulation.prototype.showShapeClues = function() {
     .attr("r", pr)
     .attr("class", "shapeclue shapeclue-2");
   
+  d3.select("#shape-layer").append("text")
+    .attr("x", x(1.25))
+    .attr("y", yT(1.01))
+    .attr("text-anchor", "middle")
+    .attr("class", "shape-size-clue")
+    .text("\u221E");
+  d3.select("#shape-layer").append("text")
+    .attr("x", x(1.25))
+    .attr("y", yT(-0.05))
+    .attr("text-anchor", "middle")
+    .attr("class", "shape-size-clue")
+    .text("\u25cb");
 };
 
 
@@ -362,7 +376,7 @@ Simulation.prototype.transitionBodies = function(duration, bodyselection, svg) {
     .attr("cy", function(d) { return y(d.pos[1]); });
   if (this.leaveTrails) {
     svg.selectAll("g")
-      .data(this.system.bodiesLast)
+      .data(this.system.bodiesPlot)
     .enter()
       .append("circle")
       .attr("cx", function(d) { return x(d.pos[0]); })
@@ -401,7 +415,7 @@ Simulation.prototype.transitionBodies2 = function(duration, bodyselection, svg) 
     .duration(duration);
   if (this.leaveTrails) {
     svg.selectAll("g")
-      .data(this.system.bodiesLast)
+      .data(this.system.bodiesPlot)
     .enter()
       .append("circle")
       .attr("cx", function(d) { return x(d.pos[0]); })

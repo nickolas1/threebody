@@ -14,8 +14,11 @@ Simulation.prototype.choosePresetInitialConditions = function(choice) {
   else if (choice === "equilateral, star-planet-planet") {
     this.setEquilateralStable();
   }
-    else if (choice === "Pythagorean") {
+  else if (choice === "Pythagorean") {
     this.setPythagorean();
+  }
+  else if (choice === "Brouke-Henon") {
+    this.setBroukeHenon();
   }
  
   this.activatePresetInitialConditions();
@@ -37,6 +40,24 @@ Simulation.prototype.setFigureEight = function() {
   bodies[2].vel = [-0.93240737, -0.86473146, 0];
   
   this.setSpatialPlotDomain(3);
+};
+
+Simulation.prototype.setBroukeHenon = function() {
+  var bodies = this.system.bodies;
+  
+  bodies[0].mass = 1/3;
+  bodies[0].pos = [-0.685916, 0, 0];
+  bodies[0].vel = [0, 1.32912, 0];
+  
+  bodies[1].mass = 1/3;
+  bodies[1].pos = [1.53206, 0, 0];
+  bodies[1].vel = [0, 0.132451, 0];
+
+  bodies[2].mass = 1/3;
+  bodies[2].pos = [-0.846147, 0, 0];
+  bodies[2].vel = [0, -1.46157, 0];
+  
+  this.setSpatialPlotDomain(4);
 };
 
 Simulation.prototype.setEquilateralStable = function() {
@@ -147,26 +168,77 @@ Simulation.prototype.applyInitialConditionsForm= function() {
     shapeSizeSelection = d3.selectAll(".shape-point-size"),
     bodySvg = d3.select("#bodies-trail-layer"),
     shapeSvg = d3.select("#shape-layer"),
+    inputOK,
     i,
     k;
 
+  inputOK = this.verifyInput();
+  
+  if (inputOK) {
+    console.log("okokok");
+    for (i = 0; i < this.system.N; i += 1) {
+      bodies[i].mass = +$("#ic-b"+i+"m").val();
+      for (k = 0; k < 3; k += 1) {
+        bodies[i].pos[k] = +$("#ic-b"+i+"p"+k).val();
+        bodies[i].vel[k] = +$("#ic-b"+i+"v"+k).val();
+      }
+    }
+  
+    this.system.moveToCenterOfMomentum();
+    this.system.calcAccels();
+  
+    this.copyBodiesToBodiesPlot();
+    this.system.calcTriangleSizeAndShape();
+ 
+    this.transitionBodies(10, bodySelection, bodySvg);
+    this.transitionShapePoint(10, shapeSelection, shapeSvg);
+    this.transitionShapePointSize(10, shapeSizeSelection);
+  }
+};
+
+Simulation.prototype.verifyInput = function() {
+  var i,
+    k,
+    field,
+    badField,
+    badInput = true;
+    
   for (i = 0; i < this.system.N; i += 1) {
-    bodies[i].mass = +$("#ic-b"+i+"m").val();
+    badField = this.verifyField($("#ic-b"+i+"m"));
+    if (!badField) {
+      badInput = false;
+    }
+    
     for (k = 0; k < 3; k += 1) {
-      bodies[i].pos[k] = +$("#ic-b"+i+"p"+k).val();
-      bodies[i].vel[k] = +$("#ic-b"+i+"v"+k).val();
-      bodies[i].pos[k] = +$("#ic-b"+i+"p"+k).val();
-      bodies[i].vel[k] = +$("#ic-b"+i+"v"+k).val();
+      badField = this.verifyField($("#ic-b"+i+"p"+k));
+      if (!badField) {
+        badInput = false;
+      }
+      badField = this.verifyField($("#ic-b"+i+"v"+k));
+      if (!badField) {
+        badInput = false;
+      }
     }
   }
   
-  this.system.moveToCenterOfMomentum();
-  this.system.calcAccels();
-  
-  this.integrator.copyBodiesToBodiesLast();
-  this.system.calcTriangleSizeAndShape();
- 
-  this.transitionBodies(10, bodySelection, bodySvg);
-  this.transitionShapePoint(10, shapeSelection, shapeSvg);
-  this.transitionShapePointSize(10, shapeSizeSelection);
+  return badInput;
+};
+
+Simulation.prototype.verifyField = function(field) {
+  if (!($.isNumeric(+field.val()))) {
+    field.val("enter a number here!");
+    return false;
+  }
+  else {
+    return true;
+  }
+};
+
+Simulation.prototype.copyBodiesToBodiesPlot = function() {
+  var i;
+  console.log("hi");
+  for (i = 0; i < this.system.N; i += 1) {
+    this.system.bodiesPlot[i].pos = this.system.bodies[i].pos.slice(0);
+    console.log("bodiesPlot ",this.system.bodiesPlot[i].pos);
+  }
 };

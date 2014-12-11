@@ -11,6 +11,7 @@ function System(N) {
 
   this.bodies = Array.apply(null, new Array(N)).map(Number.prototype.valueOf,0);
   this.bodiesLast = Array.apply(null, new Array(N)).map(Number.prototype.valueOf,0);
+  this.bodiesPlot = Array.apply(null, new Array(N)).map(Number.prototype.valueOf,0);
   
   this.timescale = 6.25;
   
@@ -25,6 +26,10 @@ function System(N) {
   this.bodiesLast.forEach(function (v, i, a) {
     a[i] = new Body(i, 0, [0, 0, 0], [0, 0, 0], [0, 0, 0]);
   });  
+  
+  this.bodiesPlot.forEach(function (v, i, a) {
+    a[i] = new Body(i, 0, [0, 0, 0], [0, 0, 0], [0, 0, 0]);
+  }); 
   
   this.shape = [null, null, null]; // shape x, y ,r
   this.shape = {"r": null, "x": null, "y": null};
@@ -76,11 +81,12 @@ System.prototype.estimateDrawingTime = function(timeNew, timeOld, timeTarget) {
     dt = timeTarget - timeOld;
     bodies = this.bodiesLast;
   }
+  console.log(dt);
   halfdt2 = 0.5 *  dt * dt;
   
   for (i = 0; i < this.N; i += 1) {
     for (k = 0; k < 3; k += 1) {
-      this.bodiesLast[i].pos[k] = 
+      this.bodiesPlot[i].pos[k] = 
         bodies[i].pos[k] + 
         bodies[i].vel[k] * dt + 
         bodies[i].acc[k] * halfdt2;
@@ -101,13 +107,13 @@ System.prototype.calcTriangleSizeAndShape = function() {
    
   // since this is just used for plotting, use bodiesLast  
   for (k = 0; k < 3; k += 1) {
-    dr = this.bodiesLast[1].pos[k] - this.bodiesLast[0].pos[k];
+    dr = this.bodiesPlot[1].pos[k] - this.bodiesPlot[0].pos[k];
     r210 += dr * dr;
     
-    dr = this.bodiesLast[2].pos[k] - this.bodiesLast[0].pos[k];
+    dr = this.bodiesPlot[2].pos[k] - this.bodiesPlot[0].pos[k];
     r220 += dr * dr;
     
-    dr = this.bodiesLast[2].pos[k] - this.bodiesLast[1].pos[k];
+    dr = this.bodiesPlot[2].pos[k] - this.bodiesPlot[1].pos[k];
     r221 += dr * dr;
   }
   
