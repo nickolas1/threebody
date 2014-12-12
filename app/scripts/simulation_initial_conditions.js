@@ -5,22 +5,8 @@
  */
  
 Simulation.prototype.choosePresetInitialConditions = function(choice) {
-  if (choice === "figure 8") {
-    this.setFigureEight();
-  }
-  else if (choice === "equilateral, equal masses") {
-    this.setEquilateralUnstable();
-  }
-  else if (choice === "equilateral, star-planet-planet") {
-    this.setEquilateralStable();
-  }
-  else if (choice === "Pythagorean") {
-    this.setPythagorean();
-  }
-  else if (choice === "Brouke-Henon") {
-    this.setBroukeHenon();
-  }
- 
+  this.setupFunction = this.initialConditionSetupFunctions[choice];
+  this.setupFunction();
   this.activatePresetInitialConditions();
 };
 

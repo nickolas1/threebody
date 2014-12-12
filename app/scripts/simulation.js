@@ -36,6 +36,14 @@ function Simulation(system) {
   
   this.leaveTrails = true;
 
+  this.initialConditionSetupFunctions = {
+    "figure 8": this.setFigureEight,
+    "equilateral, equal masses": this.setEquilateralUnstable,
+    "equilateral, star-planet-planet": this.setEquilateralStable,
+    "Pythagorean": this.setPythagorean,
+    "Brouke-Henon": this.setBroukeHenon
+  };
+
   // svg stuff
   this.integrateTimer = null;
   
