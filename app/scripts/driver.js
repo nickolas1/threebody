@@ -7,7 +7,7 @@ $(function() {
   var stepMonitor;
   var system = new System(3);
   // log it to keep an eye on things in the console
-  console.log(system);
+ /* console.log(system);*/
   
   // set up the system here- presets, user defined, whatever
   
@@ -45,8 +45,8 @@ $(function() {
     while (simulation.integrator.time < simulation.timeNextAnimate) {
       stepMonitor = simulation.integrator.integrationStep();
     }
-    console.log(simulation.integrator.time, simulation.timeNextAnimate, simulation.dtAnimate);
-    console.log(system.bodies[0].pos,system.bodiesLast[0].pos);
+  /*  console.log(simulation.integrator.time, simulation.timeNextAnimate, simulation.dtAnimate);
+    console.log(system.bodies[0].pos,system.bodiesLast[0].pos);*/
     /*do {
       stepMonitor = simulation.integrator.integrationStep();
     } while (simulation.integrator.time < simulation.timeNextAnimate);*/
@@ -87,8 +87,8 @@ $(function() {
       playControlPause.addClass("play-control-active");
       clearInterval(integrateTimer);
     }
-    console.log(system.bodies);
-    console.log(system.bodiesLast);
+    /*console.log(system.bodies);
+    console.log(system.bodiesLast);*/
   });
   
   playControlReset.click( function() {
@@ -98,9 +98,9 @@ $(function() {
       clearInterval(integrateTimer);
     }
     simulation.resetInitialConditions();
-    system.calcAngularMomentum();
+    /*system.calcAngularMomentum();
     L0 = system.angularMomentum.slice(0);
-    console.log(L0);
+    console.log(L0);*/
   });
   
   // zoom control buttons

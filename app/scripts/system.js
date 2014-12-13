@@ -55,7 +55,7 @@ System.prototype.calcTimescale = function() {
     for (k = 0; k < 3; k += 1) {
       r2 += this.bodies[i].pos[k] * this.bodies[i].pos[k];
     }
-    console.log(i, r2);
+
    // rMean += Math.sqrt(r2);
     rMean = Math.max(rMean, Math.sqrt(r2));
     totalMass += this.bodies[i].mass;
@@ -63,7 +63,7 @@ System.prototype.calcTimescale = function() {
   
  // rMean /= this.N;
   density = totalMass / Math.pow(rMean, 3);
-  console.log(density, totalMass, rMean);
+
   this.timescale = 5/Math.sqrt(density);
 };
 
@@ -83,7 +83,6 @@ System.prototype.estimateDrawingTime = function(timeNew, timeOld, timeTarget) {
     dt = timeTarget - timeOld;
     bodies = this.bodiesLast;
   }
-  console.log(dt);
   halfdt2 = 0.5 *  dt * dt;
   
   for (i = 0; i < this.N; i += 1) {
@@ -198,7 +197,6 @@ System.prototype.calcCenterOfMomentum = function() {
   
   this.bodies.forEach(function (v) {
     for(k = 0; k < 3; k += 1){
-      console.log(v.mass, v.pos[k],totalMass);
       cmPos[k] += v.mass * v.pos[k] / totalMass;
       cmVel[k] += v.mass * v.vel[k] / totalMass;
     }

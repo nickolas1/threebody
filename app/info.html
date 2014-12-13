@@ -53,17 +53,25 @@
       
       <div class="row">
         <div class="col-sm-12">
-          <h3>how do I use this? what is it showing me?</h3>
+          <h3>how do I use this?</h3>
           <p>First, you can choose from some preset initial conditions using the dropdown
           menu. This will set up some well known solutions, such as the figure-8. Once you choose
           one, click the play button to start integrating. The turtle and rabbit slow down and speed up the
           animation; the - and + zoom out and in.</p>
+          <p>You can enter your own initial conditions or modify the presets; just type in values
+          for the three bodies and click <em>apply</em>. Your system will be moved to the center
+          of momentum frame before the integration starts.</p>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-sm-12">
+          <h3>what are the plots showing?</h3>
+          <h4><em>space</em></h4>
+          <p>This plot shows the positions of the three bodies in Cartesian space, with 
+          little trails showing their recent positions. We show the <em>x-y</em> plane.</p>
           
-          <h4>The <em>space</em> plot</h4>
-          <p>This shows the positions of the three bodies in Cartesian space, with 
-          little trails showing their recent positions.</p>
-          
-          <h4>The <em>shape</em> plot</h4>
+          <h4><em>shape</em></h4>
           This one shows the configuration of the three bodies, characterized by their
           size (moment of inertia) <em>r</em>:
         </div>
@@ -89,6 +97,9 @@
       
       <div class="row">
         <div class="col-sm-12">
+          <p>In these equations 1, 2, and 3 refer to the three bodies, and 
+          <em>r<sub>ab</sub></em> is the distance between bodies <em>a</em> and <em>b</em>.
+          
           <p>These points lie in a circle; the outer line of this plot corresponds to a <em>colinear</em>
           configuration. The center of the plot is when the bodies form and <em>equilateral triangle</em>; this is
           denoted by the three little colorful circles in a triangle.
@@ -99,8 +110,7 @@
           we plot (1 + <em>r</em>)/1. The top of the line (marked infinity) means the points are far apart,
           while the bottom of the gauge (0) shows a triple collision.</p>
           
-          <p>You can enter your own initial conditions or modify the presets; just type in values
-          for the three bodies and click <em>apply</em>.</p>
+          
           
           <p><small>This site uses <a href="http://d3js.org/">D3.js</a> for visualizing, 
           <a href="http://getbootstrap.com/">bootstrap</a> for layout, and turtle and rabbit icons

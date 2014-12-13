@@ -51,8 +51,6 @@ IntegratorIAS15.prototype.clearIntegrator = function() {
   this.lastSuccessfulDt = 0;
   this.dt = 0.01;
   
-  console.log("clearing integrator",this.time,this.lastSuccessfulDt);
-  
   this.pos0 = Array.apply(null, new Array(this.N3)).map(Number.prototype.valueOf,0);
   this.vel0 = Array.apply(null, new Array(this.N3)).map(Number.prototype.valueOf,0);
   this.acc0 = Array.apply(null, new Array(this.N3)).map(Number.prototype.valueOf,0);

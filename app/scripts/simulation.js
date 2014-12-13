@@ -23,8 +23,6 @@ function Simulation(system) {
   this.integrator.copyBodiesToBodiesLast();
   this.system.calcTriangleSizeAndShape();
   
-  console.log(this.integrator);
-  
   // set up timing
   this.tfinal = 100 * this.system.timescale;
   this.secondsPerTimescale = 5;
@@ -76,16 +74,13 @@ function Simulation(system) {
 Simulation.prototype.setSpeed = function(newSpeed) {
   this.secondsPerTimescale = newSpeed;
   this.calcDtAnimate();
-  console.log(this.time, this.dtAnimate, this.timeNextAnimate);
 };
 
 Simulation.prototype.calcDtAnimate = function() {
   this.dtAnimate = this.system.timescale / (this.secondsPerTimescale * this.fps);
-  console.log(this.system.timescale, this.dtAnimate);
 };
 
 Simulation.prototype.setPlotSizes = function() {
-  console.log("resizing");
   this.w = parseInt(d3.select("#spatial-canvas").style("width"), 10);
   this.h = this.w * 0.8;
   
@@ -102,7 +97,6 @@ Simulation.prototype.setPlotSizes = function() {
     spacesvg
       .style("width", this.w)
       .style("height", this.h);  
-    console.log(spacesvg.style("width"), shapesvg.style("width"));
   }    
   
   this.xSpatial = d3.scale.linear()
@@ -128,7 +122,6 @@ Simulation.prototype.setSpatialPlotDomain = function(newRange) {
   this.spatialPlotRange = newRange;
   
   this.refreshSpatialPlot();
-  console.log("setting range ",this.spatialPlotRange);
 };
 
 
