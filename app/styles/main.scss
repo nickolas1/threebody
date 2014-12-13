@@ -1,4 +1,9 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+
+@import url(http://fonts.googleapis.com/css?family=Arvo);
+$font-family-base: "Arvo";
+
+
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
@@ -14,15 +19,9 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
   padding: 0.2em 0;
 }
 
-/* Space out content a bit */
-body {
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
-.marketing,
 .footer {
   padding-left: 15px;
   padding-right: 15px;
@@ -30,45 +29,46 @@ body {
 
 /* Custom page header */
 .header {
-  border-bottom: 1px solid #e5e5e5;
-
-  /* Make the masthead heading the same height as the navigation */
-  h3 {
+  border-bottom: 1px solid $shape-circle-outline;
+ /* color: $shape-grey;
+  background: #ededed;*/
+  & > h2 {
+    width: 50%;
+  }
+  
+  & > h2, & > ul {
     margin-top: 0;
-    margin-bottom: 0;
-    line-height: 40px;
-    padding-bottom: 19px;
+    padding-top: 35px;
+  } 
+  
+  & > .nav-pills > li > a {
+    border-radius: 0;
   }
 }
 
 /* Custom page footer */
 .footer {
-  padding-top: 19px;
-  color: #777;
-  border-top: 1px solid #e5e5e5;
+  padding-top: 13px;
+  padding-bottom: 20px;
+  padding-left: 8px;
+  margin-top: 12px;
+ /* color: #ededed;
+  background: $shape-grey;*/
+  border-top: 1px solid $shape-circle-outline;
+  
+  & > p {
+    margin: 0;
+  }
+  
+  & > a {
+    color: inherit;
+  }
 }
 
 .container-narrow > hr {
   margin: 30px 0;
 }
 
-/* Main marketing message and sign up button */
-.jumbotron {
-  text-align: center;
-  border-bottom: 1px solid #e5e5e5;
-  .btn {
-    font-size: 21px;
-    padding: 14px 24px;
-  }
-}
-
-/* Supporting marketing content */
-.marketing {
-  margin: 40px 0;
-  p + h4 {
-    margin-top: 28px;
-  }
-}
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
@@ -78,7 +78,6 @@ body {
 
   /* Remove the padding we set earlier */
   .header,
-  .marketing,
   .footer {
     padding-left: 0;
     padding-right: 0;
@@ -88,9 +87,23 @@ body {
   .header {
     margin-bottom: 30px;
   }
+}
 
-  /* Remove the bottom border on the jumbotron for visual effect */
-  .jumbotron {
-    border-bottom: 0;
+.apply-button {
+  width: 100%;
+  text-align: center;
+  padding: 3px 0;
+  margin-top: 3px;
+  background: rgba($plot-background, 0.7);
+  border: 1px solid rgba($shape-circle-outline, 0.7);
+  cursor: pointer;
+  
+  &:hover {
+    background: $plot-background;
+  }
+  
+  &:active {
+    background: #4c4c4c;
+    color: #f7f7f7;
   }
 }

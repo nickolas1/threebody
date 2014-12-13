@@ -1,0 +1,160 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>threebody</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+  <body>
+    <!--[if lt IE 10]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+
+    <div class="container">
+      <div class="header">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="index.html">simulation</a></li>
+          <li class="active"><a href="#">information</a></li>
+        </ul>
+        <h2 class="text-semi-muted">threebody</h2>
+      </div>
+      
+      <div class="row">
+        <div class="col-sm-12">
+          <h3>what is the three body problem?</h3>
+          <p><em>Briefly</em>: from some initial conditions, what are the motions of three point masses (bodies) under their mutual 
+            gravitational accelerations?</p>
+          <p><em>Less briefly</em>: see <a href="http://www.scholarpedia.org/article/Three_body_problem">
+          this Scholarpedia article</a>.</p>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-sm-12">
+          <h3>how does this page answer that?</h3>
+          <p>The simulation page lets you set up a three body problem and then numerically
+          integrate it in your browser. It uses the <a href="http://arxiv.org/abs/1409.4779">IAS15 integrator</a>,
+          a 15th order integrator that keeps the errors bouncing around at the level of machine precision. The 
+          integrator is <a href="https://github.com/hannorein/rebound">available on github</a> for 
+          more serious (as in non-browser based, scientific) useage.</p>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-sm-12">
+          <h3>how do I use this? what is it showing me?</h3>
+          <p>First, you can choose from some preset initial conditions using the dropdown
+          menu. This will set up some well known solutions, such as the figure-8. Once you choose
+          one, click the play button to start integrating. The turtle and rabbit slow down and speed up the
+          animation; the - and + zoom out and in.</p>
+          
+          <h4>The <em>space</em> plot</h4>
+          <p>This shows the positions of the three bodies in Cartesian space, with 
+          little trails showing their recent positions.</p>
+          
+          <h4>The <em>shape</em> plot</h4>
+          This one shows the configuration of the three bodies, characterized by their
+          size (moment of inertia) <em>r</em>:
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+          <img src="images/r_equation.png" class="img-responsive img-equation">
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-sm-12">
+          and two coordinates <em>x</em> and <em>y</em>:
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+          <img src="images/xy_equation.png" class="img-responsive img-equation">
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-sm-12">
+          <p>These points lie in a circle; the outer line of this plot corresponds to a <em>colinear</em>
+          configuration. The center of the plot is when the bodies form and <em>equilateral triangle</em>; this is
+          denoted by the three little colorful circles in a triangle.
+          There are three points around the edge that correspond to collisions between two of the bodies; these are 
+          marked by the pairs of colored circles.</p>
+          
+          <p>On the right is a gauge showing the size <em>r</em> of the system, though
+          we plot (1 + <em>r</em>)/1. The top of the line (marked infinity) means the points are far apart,
+          while the bottom of the gauge (0) shows a triple collision.</p>
+          
+          <p>You can enter your own initial conditions or modify the presets; just type in values
+          for the three bodies and click <em>apply</em>.</p>
+          
+          <p><small>This site uses <a href="http://d3js.org/">D3.js</a> for visualizing, 
+          <a href="http://getbootstrap.com/">bootstrap</a> for layout, and turtle and rabbit icons
+          by <a href="http://www.tillforgood.com/">Nick Abrams</a> from <a href="http://thenounproject.com/">the Noun Project</a></small></p> 
+        </div>
+      </div>
+      
+      
+    
+      <div class="footer">
+        <p>by <a href="http://nickolas1.com/">Nick</a> and <a href="http://www.math.umn.edu/~rmoeckel/">Rick</a></p>
+        <p><small><a href="https://github.com/nickolas1/threebody">source code</a></small></p>
+      </div>
+
+    </div>
+
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/affix.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/alert.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/button.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/carousel.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/collapse.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/dropdown.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tab.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/transition.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/scrollspy.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/modal.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tooltip.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/popover.js"></script>
+    <script src="bower_components/d3/d3.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <script>
+      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='//www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-XXXXX-X');ga('send','pageview');
+    </script>
+
+        <!-- build:js({app,.tmp}) scripts/main.js -->
+        <script src="scripts/body.js"></script>
+        <script src="scripts/system.js"></script>
+        <script src="scripts/integrator_leapfrog.js"></script>
+        <script src="scripts/integrator_ias15.js"></script>
+        <script src="scripts/simulation.js"></script>
+        <script src="scripts/simulation_initial_conditions.js"></script>
+        <script src="scripts/driver.js"></script>
+        <!-- endbuild -->
+</body>
+</html>

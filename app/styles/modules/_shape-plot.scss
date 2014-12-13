@@ -7,7 +7,7 @@
 .shape-circle {
   fill: $plot-background;
   stroke: $shape-circle-outline;
-  stroke-width: 3px;
+  stroke-width: 2px;
 }
 
 .shape-point, .shape-point-size {
@@ -23,18 +23,21 @@
 }
 
 .shapeclue {
-  opacity: 0.7;
+  stroke-width: 1px;
   
   &.shapeclue-0 {
-    fill: $body-0;
+    fill: rgba($body-0, 0.5);
+    stroke: rgba($body-0, 0.8);
   }
 
   &.shapeclue-1 {
-    fill: $body-1;
+    fill: rgba($body-1, 0.5);
+    stroke: rgba($body-1, 0.8);
   }
 
   &.shapeclue-2 {
-    fill: $body-2;
+    fill: rgba($body-2, 0.5);
+    stroke: rgba($body-2, 0.8);
   }
 }
 

@@ -41,7 +41,10 @@ function Simulation(system) {
     "equilateral, equal masses": this.setEquilateralUnstable,
     "equilateral, star-planet-planet": this.setEquilateralStable,
     "Pythagorean": this.setPythagorean,
-    "Brouke-Henon": this.setBroukeHenon
+    "Brouke-Henon": this.setBroukeHenon,
+    "Sun, Jupiter, Earth": this.setSunJupiterEarth,
+    "Binary star, transferring planet": this.setTransferringPlanet,
+    "Binary star, escaping planet": this.setEscapingPlanet
   };
 
   // svg stuff
@@ -217,98 +220,48 @@ Simulation.prototype.showShapeClues = function() {
     rInner,
     px,
     py,
-    pr = 4;
+    pr = 3,
+    i,
+    cluePairs = [[0, 1], [0, 2], [1, 2]];
   
   rOuter = 1.04;
   rInner = 0.05;
   pairAngleSpread = 1 * Math.PI / 180;
   
-  // set up cues for double collision points
-  // m0 - m1
-  angle = 0 * Math.PI / 180;
-  px = rOuter * Math.cos(angle + pairAngleSpread);
-  py = rOuter * Math.sin(angle + pairAngleSpread);
-  d3.select("#shape-layer").append("circle")
-    .attr("cx", x(px))
-    .attr("cy", y(py))
-    .attr("r", pr)
-    .attr("class", "shapeclue shapeclue-0");
+  for (i = 0; i < 3; i += 1) {
+    // set up cues for double collision points
+    angle = (0 + 120*i) * Math.PI / 180;
+    px = rOuter * Math.cos(angle + pairAngleSpread);
+    py = rOuter * Math.sin(angle + pairAngleSpread);
+    d3.select("#shape-layer").append("circle")
+      .attr("cx", x(px))
+      .attr("cy", y(py))
+      .attr("r", pr)
+      .attr("class", "shapeclue shapeclue-"+cluePairs[i][0]);
+      
+    px = rOuter * Math.cos(angle - pairAngleSpread);
+    py = rOuter * Math.sin(angle - pairAngleSpread);
+    d3.select("#shape-layer").append("circle")
+      .attr("cx", x(px))
+      .attr("cy", y(py))
+      .attr("r", pr)
+      .attr("class", "shapeclue shapeclue-" + cluePairs[i][1]);
     
-  px = rOuter * Math.cos(angle - pairAngleSpread);
-  py = rOuter * Math.sin(angle - pairAngleSpread);
-  d3.select("#shape-layer").append("circle")
-    .attr("cx", x(px))
-    .attr("cy", y(py))
-    .attr("r", pr)
-    .attr("class", "shapeclue shapeclue-1");
-    
-  // m0 - m2
-  angle = 120 * Math.PI / 180;
-  px = rOuter * Math.cos(angle + pairAngleSpread);
-  py = rOuter * Math.sin(angle + pairAngleSpread);
-  d3.select("#shape-layer").append("circle")
-    .attr("cx", x(px))
-    .attr("cy", y(py))
-    .attr("r", pr)
-    .attr("class", "shapeclue shapeclue-0");
-    
-  px = rOuter * Math.cos(angle - pairAngleSpread);
-  py = rOuter * Math.sin(angle - pairAngleSpread);
-  d3.select("#shape-layer").append("circle")
-    .attr("cx", x(px))
-    .attr("cy", y(py))
-    .attr("r", pr)
-    .attr("class", "shapeclue shapeclue-2");  
-  
-  // m1 - m2
-  angle = 240 * Math.PI / 180;
-  px = rOuter * Math.cos(angle + pairAngleSpread);
-  py = rOuter * Math.sin(angle + pairAngleSpread);
-  d3.select("#shape-layer").append("circle")
-    .attr("cx", x(px))
-    .attr("cy", y(py))
-    .attr("r", pr)
-    .attr("class", "shapeclue shapeclue-1");
-    
-  px = rOuter * Math.cos(angle - pairAngleSpread);
-  py = rOuter * Math.sin(angle - pairAngleSpread);
-  d3.select("#shape-layer").append("circle")
-    .attr("cx", x(px))
-    .attr("cy", y(py))
-    .attr("r", pr)
-    .attr("class", "shapeclue shapeclue-2");
-    
-  // set up cues for equilateral configuration
-  angle = 90 * Math.PI / 180;
-  px = rInner * Math.cos(angle);
-  py = rInner * Math.sin(angle);
-  d3.select("#shape-layer").append("circle")
-    .attr("cx", x(px))
-    .attr("cy", y(py))
-    .attr("r", pr)
-    .attr("class", "shapeclue shapeclue-0");
-    
-  angle = 210 * Math.PI / 180;
-  px = rInner * Math.cos(angle);
-  py = rInner * Math.sin(angle);
-  d3.select("#shape-layer").append("circle")
-    .attr("cx", x(px))
-    .attr("cy", y(py))
-    .attr("r", pr)
-    .attr("class", "shapeclue shapeclue-1");
-  
-  angle = 330 * Math.PI / 180;  
-  px = rInner * Math.cos(angle);
-  py = rInner * Math.sin(angle);
-  d3.select("#shape-layer").append("circle")
-    .attr("cx", x(px))
-    .attr("cy", y(py))
-    .attr("r", pr)
-    .attr("class", "shapeclue shapeclue-2");
-  
+    // set up cues for equilateral configuration  
+    angle = (90 + 120*i) * Math.PI / 180;
+    px = rInner * Math.cos(angle);
+    py = rInner * Math.sin(angle);
+    d3.select("#shape-layer").append("circle")
+      .attr("cx", x(px))
+      .attr("cy", y(py))
+      .attr("r", pr)
+      .attr("class", "shapeclue shapeclue-" + i);
+  }
+ 
+  // label zero and infinity for size guage  
   d3.select("#shape-layer").append("text")
     .attr("x", x(1.25))
-    .attr("y", yT(1.01))
+    .attr("y", yT(1.0))
     .attr("text-anchor", "middle")
     .attr("class", "shape-size-clue")
     .text("\u221E");

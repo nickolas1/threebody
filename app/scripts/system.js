@@ -53,8 +53,9 @@ System.prototype.calcTimescale = function() {
   for (i = 0; i < this.N; i += 1) {
     r2 = 0;
     for (k = 0; k < 3; k += 1) {
-      r2 += this.bodies[i].pos[0] * this.bodies[i].pos[0];
+      r2 += this.bodies[i].pos[k] * this.bodies[i].pos[k];
     }
+    console.log(i, r2);
    // rMean += Math.sqrt(r2);
     rMean = Math.max(rMean, Math.sqrt(r2));
     totalMass += this.bodies[i].mass;
@@ -62,6 +63,7 @@ System.prototype.calcTimescale = function() {
   
  // rMean /= this.N;
   density = totalMass / Math.pow(rMean, 3);
+  console.log(density, totalMass, rMean);
   this.timescale = 5/Math.sqrt(density);
 };
 

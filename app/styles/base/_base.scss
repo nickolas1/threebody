@@ -23,21 +23,25 @@ $shape-circle-outline: #eee5d7;
 $body-0: #46c5f8;
 $body-1: #d93d7f;
 $body-2: #47d135;
-$plot-background: #fafafa;
+$plot-background: #f4f4f4;
 $shape-circle-outline: #d2d1d3;
 
 $control-color: black;
 
 .input-group-sm {
-  line-height: 25px;
-  height: 25px;
+ /* line-height: 1.25;
+  height: 25px;*/
+  width: 100%;
+  border: 1px solid;
 
   > .form-control, > .input-group-addon {
     height: 25px;
-    line-height: 0;
+    line-height: 1.25;
     
     border-radius: 0px;
     box-shadow: none;
+    
+    border: none;
     
     color: #595959;
     
@@ -73,24 +77,32 @@ $control-color: black;
   }
 }
 
+.body-1-input {
+  border-color: rgba($body-0, 0.3);
+}
+.body-2-input {
+  border-color: rgba($body-1, 0.2);
+}
+.body-3-input {
+  border-color: rgba($body-2, 0.2);
+}
+
 h4.plot-title {
   font-weight: 600;
   font-size: 2em;
-  opacity: 0.1;
+  opacity: 0.2;
 }
 
 h5.body-title {
   opacity: 0.7;
 }
 
-.body-title-1 {
-  color: $body-0;
+.text-semi-muted {
+  opacity: 0.9;
 }
 
-.body-title-2 {
-  color: $body-1;
+.img-equation {
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
-.body-title-3 {
-  color: $body-2;
-}

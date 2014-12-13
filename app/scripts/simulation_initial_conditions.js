@@ -115,6 +115,72 @@ Simulation.prototype.setPythagorean = function() {
   this.setSpatialPlotDomain(15);
 };
 
+Simulation.prototype.setSunJupiterEarth = function() {
+  var bodies = this.system.bodies,
+    angle,
+    scale;
+  
+  bodies[0].mass = 1;
+  bodies[1].mass = 0.001;
+  bodies[2].mass = 3.0e-6;
+  
+  // set bodies up at pythagorean triangle
+  bodies[0].pos = [0, 0, 0];
+  bodies[1].pos = [0, 5.2, 0];
+  bodies[2].pos = [1, 0, 0];
+  
+  bodies[0].vel = [0, 0, 0];
+  bodies[1].vel = [-0.4385, 0, 0];
+  bodies[2].vel = [0, 1, 0];
+
+  this.setSpatialPlotDomain(15);
+  this.setSpeed(this.secondsPerTimescale * 1.5);
+};
+
+Simulation.prototype.setTransferringPlanet = function() {
+  var bodies = this.system.bodies,
+    angle,
+    scale;
+  
+  bodies[0].mass = 1;
+  bodies[1].mass = 1;
+  bodies[2].mass = 1.0e-3;
+  
+  // set bodies up at pythagorean triangle
+  bodies[0].pos = [-0.5, 0, 0];
+  bodies[1].pos = [0.5, 0, 0];
+  bodies[2].pos = [0.2, 0, 0];
+  
+  bodies[0].vel = [0, 0.707, 0];
+  bodies[1].vel = [0, -0.707, 0];
+  bodies[2].vel = [0.7, 0.8, 0];
+
+  this.setSpatialPlotDomain(3);
+  this.setSpeed(this.secondsPerTimescale / 5);
+};
+
+Simulation.prototype.setEscapingPlanet = function() {
+  var bodies = this.system.bodies,
+    angle,
+    scale;
+  
+  bodies[0].mass = 1;
+  bodies[1].mass = 1;
+  bodies[2].mass = 1.0e-3;
+  
+  // set bodies up at pythagorean triangle
+  bodies[0].pos = [-0.5, 0, 0];
+  bodies[1].pos = [0.5, 0, 0];
+  bodies[2].pos = [-0.1, 0, 0];
+  
+  bodies[0].vel = [0, 0.707, 0];
+  bodies[1].vel = [0, -0.707, 0];
+  bodies[2].vel = [-1, -0.7, 0];
+
+  this.setSpatialPlotDomain(3);
+  this.setSpeed(this.secondsPerTimescale / 2);
+};
+
 
 Simulation.prototype.activatePresetInitialConditions = function() {
   this.populateInitialConditionsForm();
