@@ -216,17 +216,17 @@ Simulation.prototype.initializeShapePlot = function() {
   x.domain([-5*xrange/12, 7*xrange/12]);
   y.domain([-yrange/2, yrange/2]);
   
-  this._shapePath = d3.select("#shape-layer").append("path")
-    .data([this._shapePoints])
-    .attr("class", "line line-shape")
-    .attr("d", this.lineFunctionShape);
-  
   // plot background and the shape point
   d3.select("#shape-layer").append("circle")
     .attr("cx", x(0))
     .attr("cy", y(0))
     .attr("r", x(1) - x(0))
     .attr("class", "shape-circle");
+    
+  this._shapePath = d3.select("#shape-layer").append("path")
+    .data([this._shapePoints])
+    .attr("class", "line line-shape")
+    .attr("d", this.lineFunctionShape);
 
   d3.select("#shape-layer").append("circle")
     .datum(shape)

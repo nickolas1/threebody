@@ -138,7 +138,7 @@ Simulation.prototype.setPythagorean = function() {
   bodies[2].vel = [0, 0, 0];
 
   this.setSpatialPlotDomain(15);
-  this.setSpeed(7.5);
+  this.setSpeed(9);
 };
 
 /**
