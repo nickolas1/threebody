@@ -52,6 +52,30 @@
   font-size: 1.4em;
 }
 
+
+.line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.8;
+  
+  &.line-shape {
+    stroke: $shape-grey;
+  }
+  
+  &.line-body-0 {
+    stroke: $body-0;
+  }
+  
+  &.line-body-1 {
+    stroke: $body-1;
+  }
+  
+  &.line-body-2 {
+    stroke: $body-2;
+  }
+}
+
 .ic-selector {
   box-shadow: none;
   border: 0;

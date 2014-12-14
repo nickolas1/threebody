@@ -33,6 +33,7 @@ Simulation.prototype.setFigureEight = function() {
   bodies[2].vel = [-0.93240737, -0.86473146, 0];
   
   this.setSpatialPlotDomain(3);
+  this.setSpeed(6);
 };
 
 
@@ -82,6 +83,7 @@ Simulation.prototype.setEquilateralStable = function() {
   bodies[2].vel = [-scale * bodies[2].pos[1], scale * bodies[2].pos[0], 0];
   
   this.setSpatialPlotDomain(5);
+  this.setSpeed(6);
 };
 
 /**
@@ -160,7 +162,7 @@ Simulation.prototype.setSunJupiterEarth = function() {
   bodies[2].vel = [0, 1, 0];
 
   this.setSpatialPlotDomain(15);
-  this.setSpeed(7.5);
+  this.setSpeed(40);
 };
 
 /**
@@ -185,7 +187,7 @@ Simulation.prototype.setTransferringPlanet = function() {
   bodies[2].vel = [0.7, 0.8, 0];
 
   this.setSpatialPlotDomain(3);
-  this.setSpeed(2);
+  this.setSpeed(6);
 };
 
 
@@ -331,10 +333,9 @@ Simulation.prototype.applyInitialConditionsForm= function() {
    
     this.system.moveToCenterOfMomentum();
     this.system.calcAccels();
-  
-   // this.copyBodiesToBodiesPlot();
+    
     this.system.calcTriangleSizeAndShape();
- 
+    this.clearPathArrays();
     this.transitionBodies(10, bodySelection, bodySvg);
     this.transitionShapePoint(10, shapeSelection, shapeSvg);
     this.transitionShapePointSize(10, shapeSizeSelection);

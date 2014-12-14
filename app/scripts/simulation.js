@@ -44,6 +44,11 @@ function Simulation(system) {
   
   /** @member {Boolean} leaveTrails draw body trails or not. hardwired default true */
   this._leaveTrails = true;
+  this._numberTrailPoints = 75;
+  this._shapePoints = [];
+  this._bodyPoints0 = [];
+  this._bodyPoints1 = [];
+  this._bodyPoints2 = [];
 
   this.initialConditionSetupFunctions = {
     "figure 8": this.setFigureEight,
@@ -57,7 +62,7 @@ function Simulation(system) {
     "Chen retrograde orbit": this.setChenRetrograde,
     "\u0160uvakov-Dmitra\u0161inovi\u0107 moth": this.setMoth
   };
-  console.log("\u0160uvakov-Dmitra\u0161inovi\u0107 moth");
+
 
   // svg stuff
  // this.integrateTimer = null;
@@ -83,9 +88,13 @@ function Simulation(system) {
   this.yShapeThermometer = d3.scale.linear()
           .range([this.h, 0]);
   
-  this.lineFunction = d3.svg.line()
-      .x(function(d) { return this.x(d[0]); }.bind(this))
-      .y(function(d) { return this.y(d[1]); }.bind(this))
+  this.lineFunctionSpace = d3.svg.line()
+      .x(function(d) { return this.xSpatial(d[0]); }.bind(this))
+      .y(function(d) { return this.ySpatial(d[1]); }.bind(this))
+      .interpolate("linear");
+  this.lineFunctionShape = d3.svg.line()
+      .x(function(d) { return this.xShape(d[0]); }.bind(this))
+      .y(function(d) { return this.yShape(d[1]); }.bind(this))
       .interpolate("linear");
   
   d3.select(window).on("resize", this.setPlotSizes);
@@ -166,6 +175,19 @@ Simulation.prototype.initializeSpatialPlot = function() {
   x.domain([-xrange/2, xrange/2]);
   y.domain([-yrange/2, yrange/2]);
 
+  this._bodyPath0 = d3.select("#bodies-layer").append("path")
+    .data([this._bodyPoints0])
+    .attr("class", "line line-body-0")
+    .attr("d", this.lineFunctionSpace);    
+  this._bodyPath1 = d3.select("#bodies-layer").append("path")
+    .data([this._bodyPoints1])
+    .attr("class", "line line-body-1")
+    .attr("d", this.lineFunctionSpace);  
+  this._bodyPath2 = d3.select("#bodies-layer").append("path")
+    .data([this._bodyPoints2])
+    .attr("class", "line line-body-2")
+    .attr("d", this.lineFunctionSpace); 
+
   d3.select("#bodies-layer").selectAll("g")
     .data(bodies)
   .enter()
@@ -173,7 +195,7 @@ Simulation.prototype.initializeSpatialPlot = function() {
     .attr("cx", function(d) { return x(d.pos[0]); })
     .attr("cy", function(d) { return y(d.pos[1]); })
     .attr("r", 7)
-    .attr("class", function(d, i) { return "nbody nbody-"+i; });       
+    .attr("class", function(d, i) { return "nbody nbody-"+i; });    
 };
 
 
@@ -193,6 +215,11 @@ Simulation.prototype.initializeShapePlot = function() {
 
   x.domain([-5*xrange/12, 7*xrange/12]);
   y.domain([-yrange/2, yrange/2]);
+  
+  this._shapePath = d3.select("#shape-layer").append("path")
+    .data([this._shapePoints])
+    .attr("class", "line line-shape")
+    .attr("d", this.lineFunctionShape);
   
   // plot background and the shape point
   d3.select("#shape-layer").append("circle")
@@ -317,27 +344,39 @@ Simulation.prototype.initializeSvgLayers = function() {
 };
 
 
+Simulation.prototype.clearPathArrays = function(duration, shapeselection, svg) {
+  var i,
+    npts = this._shapePoints.length;
+    
+  for (i = 0; i < npts; i += 1){
+    this._shapePoints.shift();
+    this._bodyPoints0.shift();
+    this._bodyPoints1.shift();
+    this._bodyPoints2.shift();
+  }
+};
+
+
+
 Simulation.prototype.transitionShapePoint = function(duration, shapeselection, svg) {
   var x = this.xShape,
     y = this.yShape,
-    fadeTime = 4000;
+    lineFunction = this.lineFunctionShape;
+
   shapeselection
     .attr("cx", function(d) { return x(d.x); })
     .attr("cy", function(d) { return y(d.y); });
   if (this._leaveTrails) {
-    svg.append("circle")
-      .datum(this.system.shape) 
-      .attr("cx", function(d) { return x(d.x); })
-      .attr("cy", function(d) { return y(d.y); })
-      .attr("r", 2)
-      .attr("class", "shape-point-trail")
-    .transition()
-      .duration(fadeTime)
-      .ease(Math.sqrt)
-      .style("opacity", 0)
-    .remove();  
+    this._shapePath
+      .attr("d", function(d) { return lineFunction(d); });
+    
+    this._shapePoints.push([this.system.shape.x, this.system.shape.y]);
+    if(this._shapePoints.length > this._numberTrailPoints) {
+      this._shapePoints.shift();
+    }
   } 
 };
+
 
 Simulation.prototype.transitionShapePointSize = function(duration, shapeselection, svg) {
   shapeselection
@@ -347,28 +386,31 @@ Simulation.prototype.transitionShapePointSize = function(duration, shapeselectio
 Simulation.prototype.transitionBodies = function(duration, bodyselection, svg) {
   var x = this.xSpatial,
     y = this.ySpatial,
-    fadeTime = 4000;
-   // IC = typeof IC !== "undefined" ? IC : false;
-    
+    lineFunction = this.lineFunctionSpace,
+    bodies = this.system.bodies;
+
   bodyselection
     .attr("cx", function(d) { return x(d.pos[0]); })
     .attr("cy", function(d) { return y(d.pos[1]); });
   if (this._leaveTrails) {
-    svg.selectAll("g")
-      .data(this.system.bodiesPlot)
-    .enter()
-      .append("circle")
-      .attr("cx", function(d) { return x(d.pos[0]); })
-      .attr("cy", function(d) { return y(d.pos[1]); })
-      .attr("r", 2)
-      .attr("class", function(d, i) { return "nbody-trail-"+i; })
-    .transition()
-      .duration(fadeTime)
-      .ease(Math.sqrt)
-      .style("opacity", 0)
-    .remove();  
+    this._bodyPath0
+      .attr("d", function(d) { return lineFunction(d); });
+    this._bodyPath1
+      .attr("d", function(d) { return lineFunction(d); });
+    this._bodyPath2
+      .attr("d", function(d) { return lineFunction(d); });
+      
+    this._bodyPoints0.push([bodies[0].pos[0], bodies[0].pos[1]]);
+    this._bodyPoints1.push([bodies[1].pos[0], bodies[1].pos[1]]);
+    this._bodyPoints2.push([bodies[2].pos[0], bodies[2].pos[1]]);
+    if(this._bodyPoints0.length > this._numberTrailPoints) {
+      this._bodyPoints0.shift();
+      this._bodyPoints1.shift();
+      this._bodyPoints2.shift();
+    }
   }
 };
+
 
 Simulation.prototype.refreshSpatialPlot = function() {
   var x = this.xSpatial,
@@ -384,13 +426,6 @@ Simulation.prototype.refreshSpatialPlot = function() {
 };
 
 
-Simulation.prototype.copyBodiesToBodiesPlot = function() {
-  var i;
-  for (i = 0; i < this.system.N; i += 1) {
-    this.system.bodiesPlot[i].pos = this.system.bodies[i].pos.slice(0);
-    //console.log("bodiesPlot ",this.system.bodiesPlot[i].pos);
-  }
-};
 
 
 
