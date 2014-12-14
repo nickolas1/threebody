@@ -55,7 +55,7 @@ Simulation.prototype.setBroukeHenon = function() {
   bodies[2].vel = [0, -1.46157, 0];
   
   this.setSpatialPlotDomain(4);
-  this.setSpeed(6.5);
+  this.setSpeed(14);
 };
 
 /**
@@ -187,6 +187,56 @@ Simulation.prototype.setTransferringPlanet = function() {
   this.setSpatialPlotDomain(3);
   this.setSpeed(2);
 };
+
+
+/**
+* Sets up Chen's retrograde orbit
+*/
+Simulation.prototype.setChenRetrograde = function() {
+  var bodies = this.system.bodies,
+    angle,
+    scale;
+  
+  bodies[0].mass = 2;
+  bodies[1].mass = 0.01;
+  bodies[2].mass = 1;
+  
+  bodies[0].pos = [0.2209, 0, 0];
+  bodies[1].pos = [0.7934, 0, 0];
+  bodies[2].pos = [-0.4498, 0, 0];
+  
+  bodies[0].vel = [0, 0.7127, 0];
+  bodies[1].vel = [0, -1.0786, 0];
+  bodies[2].vel = [0, -1.4146, 0];
+
+  this.setSpatialPlotDomain(2);
+  this.setSpeed(10);
+};
+
+/**
+* Sets up Suvakov and Dmitrasinovic moth
+*/
+Simulation.prototype.setMoth = function() {
+  var bodies = this.system.bodies,
+    angle,
+    scale;
+  
+  bodies[0].mass = 1;
+  bodies[1].mass = 1;
+  bodies[2].mass = 1;
+  
+  bodies[0].pos = [-1, 0, 0];
+  bodies[1].pos = [1, 0, 0];
+  bodies[2].pos = [0, 0, 0];
+  
+  bodies[0].vel = [0.46444, 0.39606, 0];
+  bodies[1].vel = [0.46444, 0.39606, 0];
+  bodies[2].vel = [-2*0.46444, -2*0.39606, 0];
+
+  this.setSpatialPlotDomain(4);
+  this.setSpeed(8);
+};
+
 
 /**
 * Sets up an equal mass circular binary with a planet that eventually escapes

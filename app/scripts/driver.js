@@ -68,6 +68,7 @@ $(function() {
   // initial condition buttons
   $("#ic-apply-button").click( function() {simulation.applyInitialConditionsForm();} );
   $("#preset-ic-selector").change( function() {
+    console.log(this.value);
     simulation.choosePresetInitialConditions(this.value);
   });
   

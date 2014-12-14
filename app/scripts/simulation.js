@@ -50,11 +50,14 @@ function Simulation(system) {
     "equilateral, equal masses": this.setEquilateralUnstable,
     "equilateral, star-planet-planet": this.setEquilateralStable,
     "Pythagorean": this.setPythagorean,
-    "Brouke-Henon": this.setBroukeHenon,
+    "Brouke-H\u00E9non": this.setBroukeHenon,
     "Sun, Jupiter, Earth": this.setSunJupiterEarth,
     "Binary star, transferring planet": this.setTransferringPlanet,
-    "Binary star, escaping planet": this.setEscapingPlanet
+    "Binary star, escaping planet": this.setEscapingPlanet,
+    "Chen retrograde orbit": this.setChenRetrograde,
+    "\u0160uvakov-Dmitra\u0161inovi\u0107 moth": this.setMoth
   };
+  console.log("\u0160uvakov-Dmitra\u0161inovi\u0107 moth");
 
   // svg stuff
  // this.integrateTimer = null;
