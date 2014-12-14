@@ -4,12 +4,19 @@
   Simulation
  */
  
+/**
+* Driver method to activate the chosen initial condition presets
+*/ 
 Simulation.prototype.choosePresetInitialConditions = function(choice) {
   this.setupFunction = this.initialConditionSetupFunctions[choice];
   this.setupFunction();
   this.activatePresetInitialConditions();
 };
 
+/**
+* Sets up the figure 8 periodic solution.
+* See e.g. {@link http://homepages.math.uic.edu/~jan/mcs320s07/Project_Two/sol_body.html}
+*/ 
 Simulation.prototype.setFigureEight = function() {
   var bodies = this.system.bodies;
   
@@ -28,6 +35,10 @@ Simulation.prototype.setFigureEight = function() {
   this.setSpatialPlotDomain(3);
 };
 
+
+/**
+* Sets up the Brouke Henon periodic solution
+*/ 
 Simulation.prototype.setBroukeHenon = function() {
   var bodies = this.system.bodies;
   
@@ -44,8 +55,12 @@ Simulation.prototype.setBroukeHenon = function() {
   bodies[2].vel = [0, -1.46157, 0];
   
   this.setSpatialPlotDomain(4);
+  this.setSpeed(6.5);
 };
 
+/**
+* Sets up an equilateral triangle solution with a dominant mass
+*/
 Simulation.prototype.setEquilateralStable = function() {
   var bodies = this.system.bodies,
     scale;
@@ -69,6 +84,9 @@ Simulation.prototype.setEquilateralStable = function() {
   this.setSpatialPlotDomain(5);
 };
 
+/**
+* Sets up an equilateral triangle solution with equal masses; unstable
+*/
 Simulation.prototype.setEquilateralUnstable = function() {
   var bodies = this.system.bodies,
     angle,
@@ -92,8 +110,13 @@ Simulation.prototype.setEquilateralUnstable = function() {
   bodies[2].vel = [-scale * bodies[2].pos[1], scale * bodies[2].pos[0], 0];
   
   this.setSpatialPlotDomain(5);
+  this.setSpeed(4);
 };
 
+/**
+* Sets up the historic Pythagorean problem
+* See e.g. {@link http://www.ucolick.org/~laugh/oxide/projects/burrau.html}
+*/
 Simulation.prototype.setPythagorean = function() {
   var bodies = this.system.bodies,
     angle,
@@ -113,8 +136,12 @@ Simulation.prototype.setPythagorean = function() {
   bodies[2].vel = [0, 0, 0];
 
   this.setSpatialPlotDomain(15);
+  this.setSpeed(7.5);
 };
 
+/**
+* Sets up a stylized Sun-Jupiter-Earth system
+*/
 Simulation.prototype.setSunJupiterEarth = function() {
   var bodies = this.system.bodies,
     angle,
@@ -124,7 +151,6 @@ Simulation.prototype.setSunJupiterEarth = function() {
   bodies[1].mass = 0.001;
   bodies[2].mass = 3.0e-6;
   
-  // set bodies up at pythagorean triangle
   bodies[0].pos = [0, 0, 0];
   bodies[1].pos = [0, 5.2, 0];
   bodies[2].pos = [1, 0, 0];
@@ -134,9 +160,13 @@ Simulation.prototype.setSunJupiterEarth = function() {
   bodies[2].vel = [0, 1, 0];
 
   this.setSpatialPlotDomain(15);
-  this.setSpeed(this.secondsPerTimescale * 1.5);
+  this.setSpeed(7.5);
 };
 
+/**
+* Sets up an equal mass circular binary with a planet that chaotically bounces
+* between the two stars
+*/
 Simulation.prototype.setTransferringPlanet = function() {
   var bodies = this.system.bodies,
     angle,
@@ -146,7 +176,6 @@ Simulation.prototype.setTransferringPlanet = function() {
   bodies[1].mass = 1;
   bodies[2].mass = 1.0e-3;
   
-  // set bodies up at pythagorean triangle
   bodies[0].pos = [-0.5, 0, 0];
   bodies[1].pos = [0.5, 0, 0];
   bodies[2].pos = [0.2, 0, 0];
@@ -156,9 +185,12 @@ Simulation.prototype.setTransferringPlanet = function() {
   bodies[2].vel = [0.7, 0.8, 0];
 
   this.setSpatialPlotDomain(3);
-  this.setSpeed(this.secondsPerTimescale / 5);
+  this.setSpeed(2);
 };
 
+/**
+* Sets up an equal mass circular binary with a planet that eventually escapes
+*/
 Simulation.prototype.setEscapingPlanet = function() {
   var bodies = this.system.bodies,
     angle,
@@ -168,25 +200,29 @@ Simulation.prototype.setEscapingPlanet = function() {
   bodies[1].mass = 1;
   bodies[2].mass = 1.0e-3;
   
-  // set bodies up at pythagorean triangle
   bodies[0].pos = [-0.5, 0, 0];
   bodies[1].pos = [0.5, 0, 0];
   bodies[2].pos = [-0.1, 0, 0];
   
   bodies[0].vel = [0, 0.707, 0];
   bodies[1].vel = [0, -0.707, 0];
-  bodies[2].vel = [-1, -0.7, 0];
+  bodies[2].vel = [1.25, 0.5, 0];
 
-  this.setSpatialPlotDomain(3);
-  this.setSpeed(this.secondsPerTimescale / 2);
+  this.setSpatialPlotDomain(18);
+  this.setSpeed(1.2);
 };
 
-
+/**
+* Driver method to update the initial condition form and set the bodies
+*/
 Simulation.prototype.activatePresetInitialConditions = function() {
   this.populateInitialConditionsForm();
   this.resetInitialConditions();
 };
 
+/**
+* Driver method to set the bodies and reset various timers, energies, etc.
+*/
 Simulation.prototype.resetInitialConditions = function() {
   this.integrator.clearIntegrator();
   this.timeNextAnimate = 0;
@@ -198,7 +234,9 @@ Simulation.prototype.resetInitialConditions = function() {
 };
 
 
-
+/**
+* Set the initial conditions in the custom initial conditions form in the DOM
+*/
 Simulation.prototype.populateInitialConditionsForm = function() {
   var bodies = this.system.bodies,
     i,
@@ -213,8 +251,13 @@ Simulation.prototype.populateInitialConditionsForm = function() {
   }
 };
 
+/**
+* Take values from the initial condition form and apply them to the bodies
+* after verification of numerical values
+*/
 Simulation.prototype.applyInitialConditionsForm= function() {  
   var bodies = this.system.bodies,
+    bodiesPlot = this.system.bodiesPlot,
     bodySelection = d3.selectAll(".nbody"),
     shapeSelection = d3.selectAll(".shape-point"),
     shapeSizeSelection = d3.selectAll(".shape-point-size"),
@@ -227,19 +270,19 @@ Simulation.prototype.applyInitialConditionsForm= function() {
   inputOK = this.verifyInput();
   
   if (inputOK) {
-    console.log("okokok");
     for (i = 0; i < this.system.N; i += 1) {
       bodies[i].mass = +$("#ic-b"+i+"m").val();
       for (k = 0; k < 3; k += 1) {
         bodies[i].pos[k] = +$("#ic-b"+i+"p"+k).val();
         bodies[i].vel[k] = +$("#ic-b"+i+"v"+k).val();
+        bodiesPlot[i].pos[k] = +$("#ic-b"+i+"p"+k).val();
       }
     }
-  
+   
     this.system.moveToCenterOfMomentum();
     this.system.calcAccels();
   
-    this.copyBodiesToBodiesPlot();
+   // this.copyBodiesToBodiesPlot();
     this.system.calcTriangleSizeAndShape();
  
     this.transitionBodies(10, bodySelection, bodySvg);
@@ -248,6 +291,11 @@ Simulation.prototype.applyInitialConditionsForm= function() {
   }
 };
 
+/**
+* Driver method to check that the initial conditions form holds numbers
+*
+* @returns {Boolean} true if input is ok; false if there's at least one bad input
+*/
 Simulation.prototype.verifyInput = function() {
   var i,
     k,
@@ -276,6 +324,9 @@ Simulation.prototype.verifyInput = function() {
   return badInput;
 };
 
+/**
+* Verify that an input field holds a number
+*/
 Simulation.prototype.verifyField = function(field) {
   if (!($.isNumeric(+field.val()))) {
     field.val("enter a number here!");
@@ -283,14 +334,5 @@ Simulation.prototype.verifyField = function(field) {
   }
   else {
     return true;
-  }
-};
-
-Simulation.prototype.copyBodiesToBodiesPlot = function() {
-  var i;
-  console.log("hi");
-  for (i = 0; i < this.system.N; i += 1) {
-    this.system.bodiesPlot[i].pos = this.system.bodies[i].pos.slice(0);
-    console.log("bodiesPlot ",this.system.bodiesPlot[i].pos);
   }
 };

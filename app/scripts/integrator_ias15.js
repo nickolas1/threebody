@@ -3,29 +3,40 @@
 
 
 /**
-takes as input a system object
+* Creates an instance of IntegratorIAS15
+* the IntegratorIAS15 advances (in time) a {@link System} 
+* which holds a collection of {@link Body}s
+*
+* this is a js port of the C version of the IAS15 integrator described in
+* {@link http://arxiv.org/abs/1409.4779}
+* and available under GPL3 at {@link https://github.com/hannorein/rebound}. 
+*
+* @constructor
+* @param {System} system the system this integrator is in charge of integrating in time
 */
-
 function IntegratorIAS15(system) {
 
-  this.sps = 60; /* steps per second */
-  this.redraw = 2;
-  this.transitionTime = 250;
-  
+  /*this.sps = 60; /* steps per second */
+  /*this.redraw = 2;*/
+  /*this.transitionTime = 250;*/
+  /** @member {System} system the system this integrator is in charge of */
   this.system = system;
   
   // integrator control parameters
+  /** @member {Number} epsilon Accuracy parameter; default 1.e-9 keeps it near machine level */
   this.epsilon = 1e-9;
-  //this.epsilon = 0;
+  /** @member {Number} safetyFactor Control large jumps in timestep */
   this.safetyFactor = 0.25;
   
-  this.maxDt = 1e300;
-  
+  /** @member {Number} N number of bodies in the {@link System} */
   this.N = this.system.N;
+  /** @member {Number} N3 Thrice the number of bodies */
   this.N3 = 3 * this.N;
   
+  /** @member {Number} minDt minimum allowed timestep. default 1.e-12 */
   this.minDt = 1e-12;
   
+  /** @member {Number} maxDt maximum allowed timestep */
   var maxDt;
   Object.defineProperty(this, "maxDt", {
     get: function() {
@@ -46,20 +57,36 @@ function IntegratorIAS15(system) {
   this.setConstants();
 }
 
+
+/**
+* Method to clear the integrator to a fresh state
+*/
 IntegratorIAS15.prototype.clearIntegrator = function() {
+  /** @member {Number} time The current time */
   this.time = 0;
+  /** @member {Number} lastSuccessfulDt The last timestep */
   this.lastSuccessfulDt = 0;
+  /** @member {Number} dt The current timestep */
   this.dt = 0.01;
   
+  /** @member {Number[]} pos0 Positions at the beginning of the timestep */
   this.pos0 = Array.apply(null, new Array(this.N3)).map(Number.prototype.valueOf,0);
+  /** @member {Number[]} vel0 Velocities at the beginning of the timestep */
   this.vel0 = Array.apply(null, new Array(this.N3)).map(Number.prototype.valueOf,0);
+  /** @member {Number[]} acc0 Accelerations at the beginning of the timestep */
   this.acc0 = Array.apply(null, new Array(this.N3)).map(Number.prototype.valueOf,0);
+  /** @member {Number[]} acc1 Accelerations at intermediate times */
   this.acc1 = Array.apply(null, new Array(this.N3)).map(Number.prototype.valueOf,0);
+  /** @member {Number[]} cspos Compensated summation position */
   this.cspos = Array.apply(null, new Array(this.N3)).map(Number.prototype.valueOf,0);
+  /** @member {Number[]} csvel Compensated summation velocity */
   this.csvel = Array.apply(null, new Array(this.N3)).map(Number.prototype.valueOf,0);
   
+  /** @member {Number[]} g integrator internals */
   this.g = [[], [], [], [], [], [], []];
+  /** @member {Number[]} b integrator internals */
   this.b = [[], [], [], [], [], [], []];
+  /** @member {Number[]} e integrator internals */
   this.e = [[], [], [], [], [], [], []];
   this.updateResetArrays();
   
@@ -67,7 +94,10 @@ IntegratorIAS15.prototype.clearIntegrator = function() {
 };
 
 
-/* actual integration step. returns 1 if successful, 0 if unsuccessful
+/**
+* Method to take an integration step
+*
+* @returns {Number} Success flag: 0 if the step is rejected, 1 if it is accepted
 */
 IntegratorIAS15.prototype.integrationStep = function() {
   var stepTimeStart = this.time,
@@ -86,7 +116,7 @@ IntegratorIAS15.prototype.integrationStep = function() {
   
   this.system.calcAccels();
   
-  this.copyBodiesToBodiesLast();
+  this.system.copyBodiesToBodiesLast();
   
   this.copyBodiesToPosVelAcc(); 
   
@@ -169,6 +199,11 @@ IntegratorIAS15.prototype.integrationStep = function() {
   return 1;
 };
 
+/**
+* Predictor-corrector steps through the timestep
+*
+* @param {Number} stepTimeStart the starting time
+*/
 IntegratorIAS15.prototype.gaussRadauStepthroughInterval = function(stepTimeStart) {
   var tmp,
     gk,
@@ -336,7 +371,11 @@ IntegratorIAS15.prototype.gaussRadauStepthroughInterval = function(stepTimeStart
   return predictorCorrectorError;
 };
 
-
+/**
+* Predictor corrector prediction
+*
+* @param {Number} n Which Gauss-Radau interval are we predicting to
+*/
 IntegratorIAS15.prototype.predictGaussRadauPositions = function(n) {
   var s = [0, 0, 0, 0, 0, 0, 0, 0],
     xk,
@@ -362,11 +401,15 @@ IntegratorIAS15.prototype.predictGaussRadauPositions = function(n) {
       this.system.bodies[i].pos[k % 3] = this.pos0[k] + xk;
     }
   }
-  return s[0];
+  //return s[0];
 };
 
 
-
+/**
+* Method to predict internal arrays for next timestep
+*
+* @param {Number} ratio Current timestep divided by previous successful timestep
+*/
 IntegratorIAS15.prototype.predictNextBAndE = function(ratio) {
   var q1 = ratio,
     q2 = q1 * q1,
@@ -417,9 +460,13 @@ IntegratorIAS15.prototype.predictNextBAndE = function(ratio) {
   }
 };
 
-
+/**
+* Copy b and e arrays to their storage arrays for use in the next timestep
+*/
 IntegratorIAS15.prototype.updateResetArrays = function() {
+  /** @member {Number[]} bReset integrator internals initial state storage */
   this.bReset = this.b.slice(0);  
+  /** @member {Number[]} eReset integrator internals initial state storage */
   this.eReset = this.e.slice(0);
   
   /*for (i = 0; i < 7; i += 1) {
@@ -430,16 +477,13 @@ IntegratorIAS15.prototype.updateResetArrays = function() {
   }*/
 };
 
-
-IntegratorIAS15.prototype.copyPosVelToBodies = function() {
-  var i;
-  for (i = 0; i < this.N; i += 1) {
-    this.system.bodies[i].pos = this.pos0.slice(3*i, 3*i + 3);
-    this.system.bodies[i].vel = this.vel0.slice(3*i, 3*i + 3);
-  }
-};
-
-
+/**
+* Set the final values of the position and velocity. This sets the integrator
+* internal values pos0 and vel0; the bodies are updated using these values 
+* in {@link IntegratoIAS15.copyPosVelToBodies}.
+*
+* @param {Number} dtLast the timestep that was just taken
+*/
 IntegratorIAS15.prototype.finalizePosVel = function(dtLast) {
   var dtLast2 = dtLast * dtLast,
     k,
@@ -461,6 +505,23 @@ IntegratorIAS15.prototype.finalizePosVel = function(dtLast) {
   }
 };
 
+/**
+* Update the position and velocity of the actual bodies to the value found
+* at the end of the timestep
+*/
+IntegratorIAS15.prototype.copyPosVelToBodies = function() {
+  var i;
+  for (i = 0; i < this.N; i += 1) {
+    this.system.bodies[i].pos = this.pos0.slice(3*i, 3*i + 3);
+    this.system.bodies[i].vel = this.vel0.slice(3*i, 3*i + 3);
+  }
+};
+
+/**
+* Method to estimate the error due to the integration step
+*
+* @returns {Number} An estimate of the integrator error
+*/
 IntegratorIAS15.prototype.getIntegratorError = function() {
   var integratorError = 0,
     maxak = 0,
@@ -501,7 +562,12 @@ IntegratorIAS15.prototype.getIntegratorError = function() {
   return integratorError;
 };
 
-
+/**
+* Monitor to the predictor corrector step, and break if it is slow to converge
+* or oscillatory
+*
+* @returns {Boolean} true when we should stop; false when we should keep predictor-correctoring
+*/
 IntegratorIAS15.prototype.checkPredCorrBreaks = function(iterations, error, errorLast) {
   //console.log("pred corr errs: ",iterations, error, errorLast);
   if (error < 1e-16) {
@@ -516,16 +582,9 @@ IntegratorIAS15.prototype.checkPredCorrBreaks = function(iterations, error, erro
 };
 
 
-IntegratorIAS15.prototype.copyBodiesToBodiesLast = function() {
-  var i;
-  for (i = 0; i < this.N; i += 1) {
-    this.system.bodiesLast[i].pos = this.system.bodies[i].pos.slice(0);
-    this.system.bodiesLast[i].vel = this.system.bodies[i].vel.slice(0);
-    this.system.bodiesLast[i].acc = this.system.bodies[i].acc.slice(0);
-  }
-};
-
-
+/**
+* Set the intergrators internal pos0, vel0, acc0 values from {@link System.bodies}
+*/
 IntegratorIAS15.prototype.copyBodiesToPosVelAcc = function() {
   var i;
   // store initial positions, velocities, accelerations in 1D array
@@ -544,6 +603,9 @@ IntegratorIAS15.prototype.copyBodiesToPosVelAcc = function() {
   }
 };  
  
+/**
+* Sets some integrator internals
+*/
 IntegratorIAS15.prototype.setGArray = function() {
   var i; 
   for (i = 0; i < this.N3; i += 1) {
@@ -563,6 +625,9 @@ IntegratorIAS15.prototype.setGArray = function() {
   }
 };
 
+/**
+* Zero out some integrator internals
+*/
 IntegratorIAS15.prototype.initializeZeroArrays = function() {
   var i, k;
   
@@ -576,6 +641,9 @@ IntegratorIAS15.prototype.initializeZeroArrays = function() {
   }
 };
 
+/**
+* Set integrator constant values
+*/
 IntegratorIAS15.prototype.setConstants = function() {
   // Gauss Radau spacings: 8 values
   this._hGR = [0.0, 0.0562625605369221464656521910, 0.1802406917368923649875799428, 

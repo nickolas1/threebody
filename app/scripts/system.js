@@ -2,17 +2,26 @@
 "use strict";
 /*global Body*/
 
+/**
+* Creates an instance of System. 
+* The System holds a collection of {@link Body}s.
+*
+* @constructor
+* @param {Number} N The number of bodies in the N-body system
+*/
 
 function System(N) {
+  /** @member {Number} N The number of bodies in the N-body system */
   this.N = N;
-  var masses = this.generateMasses(),
-    pos = this.generatePositions(),
-    vel = this.generateVelocities(pos);
 
+  /** @member {Body[]} bodies Array of Body objects at the current timestep */
   this.bodies = Array.apply(null, new Array(N)).map(Number.prototype.valueOf,0);
+  /** @member {Body[]} bodiesLast Array of Body objects at the previous timestep */
   this.bodiesLast = Array.apply(null, new Array(N)).map(Number.prototype.valueOf,0);
+  /** @member {Body[]} bodiesPlot Array of Body objects at the interpolated plotting time */
   this.bodiesPlot = Array.apply(null, new Array(N)).map(Number.prototype.valueOf,0);
   
+  /** @member {Number} timescale The natural timescale of the system */
   this.timescale = 6.25;
   
   /*this.bodies.forEach(function (v, i, a) {
@@ -31,15 +40,20 @@ function System(N) {
     a[i] = new Body(i, 0, [0, 0, 0], [0, 0, 0], [0, 0, 0]);
   }); 
   
-  this.shape = [null, null, null]; // shape x, y ,r
-  this.shape = {"r": null, "x": null, "y": null};
+  /** @member {Number[]} shape Array containing the shape parameters r, x, y */
+  this.shape = {"r": 0, "x": 0, "y": 0};
  // this.calcTriangleSizeAndShape();
   
+  /** @member {Number} initialEnergy The system's total energy at time 0 */
   this.initialEnergy = null;
+  /** @member {Number[]} initialEnergy The system's total energy at time 0 */
   this.angularMomentum = [null, null, null];
 }
 
-
+/**
+* Method to calculate the system's natural timescale, taken to be an estimate of the
+* free-fall timescale
+*/
 System.prototype.calcTimescale = function() {
   var rMean,
     density,
@@ -67,7 +81,15 @@ System.prototype.calcTimescale = function() {
   this.timescale = 5/Math.sqrt(density);
 };
 
-
+/**
+* Method to interpolate the positions of {@link System.bodiesLast} to the desired drawing
+* time. This is done by simply linearly interpolating from whichever of the two avaiable
+* times is closest to the target time.
+*
+* @param {Number} timeNew The time that {@link System.bodies} inhabits
+* @param {Number} timeOld The time that {@link System.bodiesLast} inhabits
+* @param {Number} timeTarget The desired drawing time
+*/
 System.prototype.estimateDrawingTime = function(timeNew, timeOld, timeTarget) {
   var dt,
     halfdt2,
@@ -95,7 +117,9 @@ System.prototype.estimateDrawingTime = function(timeNew, timeOld, timeTarget) {
   }
 };
 
-
+/**
+* Method to calculate the {@link System.shape} parameters r, x, y
+*/
 System.prototype.calcTriangleSizeAndShape = function() {
   var r210 = 0,
     r220 = 0,
@@ -105,28 +129,19 @@ System.prototype.calcTriangleSizeAndShape = function() {
     m1 = this.bodies[1].mass,
     m2 = this.bodies[2].mass,
     k;
-   
-  // since this is just used for plotting, use bodiesLast  
+  
+  // since this is just used for plotting, use bodiesPlot  
   for (k = 0; k < 3; k += 1) {
     dr = this.bodiesPlot[1].pos[k] - this.bodiesPlot[0].pos[k];
     r210 += dr * dr;
     
     dr = this.bodiesPlot[2].pos[k] - this.bodiesPlot[0].pos[k];
     r220 += dr * dr;
-    
+  
     dr = this.bodiesPlot[2].pos[k] - this.bodiesPlot[1].pos[k];
     r221 += dr * dr;
+   
   }
-  
- // this.shape[2] = Math.sqrt((m1*m0*r210 + m2*m0*r220 + m2*m1*r221) / (m0+m1+m2));
- // this.shape[0] = (r220 + r221 - 2*r210) / (r210 + r220 + r221);
- // this.shape[1] = 1.73205081 * (r221 - r220) / (r210 + r220 + r221);
-  
-  //this.shape = {
-  //  "r": Math.sqrt((m1*m0*r210 + m2*m0*r220 + m2*m1*r221) / (m0+m1+m2)),
-  //  "x": (r220 + r221 - 2*r210) / (r210 + r220 + r221),
-  //  "y": 1.73205081 * (r221 - r220) / (r210 + r220 + r221)
-  //};
   
   this.shape.r = Math.sqrt((m1*m0*r210 + m2*m0*r220 + m2*m1*r221) / (m0+m1+m2));
   this.shape.x = (r220 + r221 - 2*r210) / (r210 + r220 + r221);
@@ -135,143 +150,104 @@ System.prototype.calcTriangleSizeAndShape = function() {
 };
 
 
-System.prototype.generateMasses = function() {
-  var masses = Array.apply(null, new Array(this.N)).map(Number.prototype.valueOf,0);
-
-  masses[0] = 1;
-  masses[1] = 0.1;     
- 
-  masses[0] = 1;
-  masses[1] = 1;
-  masses[2] = 1;
- 
-  return masses;     
-};
-
-System.prototype.generatePositions = function() {
-  // plummer sphere!
-  var positions = Array.apply(null, new Array(this.N)).map(Number.prototype.valueOf,0);  
-  
-  positions[0] = [0, 0, 0];
-  positions[1] = [1, 0, 0];
-  
-  positions[0] = [0.97000436, -0.24308753, 1];
-  positions[1] = [-0.97000436, 0.24308753, 1];
-  positions[2] = [0, 0, 1];
-  
-  /*positions[0] = [-1, -2, 0];
-  positions[1] = [-1, 1, 0];
-  positions[2] = [0, 0, 0];*/
-  
-  return positions;     
-};       
-
-
-System.prototype.generateVelocities = function(positions) {
-  var velocities = Array.apply(null, new Array(this.N)).map(Number.prototype.valueOf,0);
-  
-  velocities[0] = [0, 0, 0];
-  velocities[1] = [0, 0.8, 0];
-  
-  velocities[0] = [0.466203685, 0.43236573, 0];
-  velocities[1] = [0.466203685, 0.43236573, 0];
-  velocities[2] = [-0.93240737, -0.86473146, 0];
-    
-/*  velocities[0] = [0.466203685, 0.43236573, 0];
-  velocities[1] = [0.466203685, 0.43236573, 0];
-  velocities[2] = [-0.93240737, -0.86473146, 0];*/ 
-    
-  return velocities;
-};
-
-
-System.prototype.calcCenterOfMomentum = function() {
-  var cmPos = [0, 0, 0],
-    cmVel = [0, 0, 0],
-    totalMass = 0,
-    k;
-  
-  this.bodies.forEach(function (v) {
-    totalMass += v.mass;
-  });
-  
-  this.bodies.forEach(function (v) {
-    for(k = 0; k < 3; k += 1){
-      cmPos[k] += v.mass * v.pos[k] / totalMass;
-      cmVel[k] += v.mass * v.vel[k] / totalMass;
-    }
-  });
-  
-  this.centerOfMomentumPosition = cmPos;
-  this.centerOfMomentumVelocity = cmVel;   
-};
-
-
-System.prototype.calcKineticEnergy = function() {
-  var ke = 0,
-    v2,
-    k;
-  
-  this.bodies.forEach(function (v) {    
-    v2 = 0;
-    for(k = 0; k < 3; k += 1){
-      v2 = v2 + v.vel[k] * v.vel[k];
-    }
-    ke += 0.5 * v.mass * v2;
-  });
-  
-  this.kineticEnergy = ke;
-};
-
-
+/**
+* Method to move the {@link System.bodies} to the center of momentum frame
+*/
 System.prototype.moveToCenterOfMomentum = function() {
-  var k;
+  var k,
+    cm;
+  
+  var calcCenterOfMomentum = function(bodies) {
+    var cmPos = [0, 0, 0],
+      cmVel = [0, 0, 0],
+      totalMass = 0,
+      k;
+  
+    bodies.forEach(function (v) {
+      totalMass += v.mass;
+    });
+  
+    bodies.forEach(function (v) {
+      for(k = 0; k < 3; k += 1){
+        cmPos[k] += v.mass * v.pos[k] / totalMass;
+        cmVel[k] += v.mass * v.vel[k] / totalMass;
+      }
+    });
+  
+    return {
+      pos: cmPos,
+      vel: cmVel
+    };
+  };
 
-  this.calcCenterOfMomentum();
-  this.calcKineticEnergy();
-  this.calcPotentialEnergy();
+  cm = calcCenterOfMomentum(this.bodies);
 
   // move to the center of mass
   this.bodies.forEach(function (v, i, a) {
     for (k = 0; k < 3; k += 1) {
-      a[i].pos[k] -= this.centerOfMomentumPosition[k];
-      a[i].vel[k] -= this.centerOfMomentumVelocity[k];
+      a[i].pos[k] -= cm.pos[k];
+      a[i].vel[k] -= cm.vel[k];
     }
   }, this);  
 };
 
-
-System.prototype.calcPotentialEnergy = function() {
-  var dr = [0, 0, 0],
-    r2,
-    pot = 0,
-    posi,
-    mi,
-    posj,
-    mj,
-    i, j, k;
-  
-  for (i = 0; i < this.N - 1; i += 1) {
-    for (j = i + 1; j < this.N; j += 1) {
-      //get the potential contribution from each pair
-      r2 = 0;
-      for(k = 0; k < 3; k += 1){
-        dr[k] = this.bodies[j].pos[k] - this.bodies[i].pos[k];
-        r2 += dr[k] * dr[k];
-      }
-      pot -= this.bodies[i].mass * this.bodies[j].mass / Math.sqrt(r2);  
-    }
-  }
-  this.potentialEnergy = pot;
-};
-
-
+/**
+* Calculate the total energy of the {@link System.bodies}
+*/
 System.prototype.calcTotalEnergy = function() {
-  this.calcKineticEnergy();
-  this.calcPotentialEnergy();
-  this.totalEnergy = this.kineticEnergy + this.potentialEnergy;
+  var calcKineticEnergy = function(bodies) {
+    var ke = 0,
+      v2,
+      k;
+  
+    bodies.forEach(function (v) {    
+      v2 = 0;
+      for(k = 0; k < 3; k += 1){
+        v2 = v2 + v.vel[k] * v.vel[k];
+      }
+      ke += 0.5 * v.mass * v2;
+    });
+  
+    /** @member {Number[]} kineticEnergy The kinetic energy */
+    return ke;
+  }; 
+  
+  var calcPotentialEnergy = function(bodies) {
+    var dr = [0, 0, 0],
+      r2,
+      pot = 0,
+      posi,
+      mi,
+      posj,
+      mj,
+      N = bodies.length,
+      i, j, k;
+  
+    for (i = 0; i < N - 1; i += 1) {
+      for (j = i + 1; j < N; j += 1) {
+        //get the potential contribution from each pair
+        r2 = 0;
+        for(k = 0; k < 3; k += 1){
+          dr[k] = bodies[j].pos[k] - bodies[i].pos[k];
+          r2 += dr[k] * dr[k];
+        }
+        pot -= bodies[i].mass * bodies[j].mass / Math.sqrt(r2);  
+      }
+    }
+    return pot;
+  };
+  
+  var kin = calcKineticEnergy(this.bodies),
+    pot = calcPotentialEnergy(this.bodies);
+  
+  /** @member {Number[]} totalEnergy The kinetic plus potential energy */
+  this.totalEnergy = kin + pot;
 };
 
+
+/**
+* Method to calculate the angular momentum of the {@link System.bodies}
+*/
 System.prototype.calcAngularMomentum = function() {
   var i,
     b = this.bodies;
@@ -284,7 +260,23 @@ System.prototype.calcAngularMomentum = function() {
   }
 };
 
+/**
+* Copy bodies to bodiesLast before taking an 
+* integration step
+*/
+System.prototype.copyBodiesToBodiesLast = function() {
+  var i;
+  for (i = 0; i < this.N; i += 1) {
+    this.bodiesLast[i].pos = this.bodies[i].pos.slice(0);
+    this.bodiesLast[i].vel = this.bodies[i].vel.slice(0);
+    this.bodiesLast[i].acc = this.bodies[i].acc.slice(0);
+  }
+};
 
+
+/**
+* Method to calculate and set the gravitational accelerations of {@link System.bodies}
+*/
 System.prototype.calcAccels = function() {
   var i, j, k,
       r2,

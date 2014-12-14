@@ -114,11 +114,11 @@ $(function() {
   
     // speed control buttons
   speedControlSlow.click( function() {
-    simulation.setSpeed(simulation.secondsPerTimescale * 1.8);
+    simulation.multiplySpeed(1.8);
   });
   
   speedControlFast.click( function() {
-    simulation.setSpeed(simulation.secondsPerTimescale / 1.8);
+    simulation.multiplySpeed(1 / 1.8);
   });
 
   

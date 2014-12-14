@@ -3,7 +3,15 @@
 /* global d3, 
   IntegratorIAS15
  */
-
+ 
+/**
+* Creates an instance of Simulation
+* the Simulation is in charge of setting up the plots and controlling the integrator.
+* the Simulation holds a {@link System} which holds a collection of {@link Body}s
+*
+* @constructor
+* @param {System} system the system this simulation is displaying
+*/
 
 function Simulation(system) {
   this.system = system;
@@ -18,21 +26,24 @@ function Simulation(system) {
   this.system.calcTimescale();
   
   // get an integrator and inject the system
+  /** @member {IntegratorIAS15} integrator the integrator that advances the system */
   this.integrator = new IntegratorIAS15(this.system);
-  // use integrator method to setup bodiesLast, then get system shape
-  this.integrator.copyBodiesToBodiesLast();
-  this.system.calcTriangleSizeAndShape();
+  // setup bodiesLast, then get system shape
+  this.system.copyBodiesToBodiesLast();
   
   // set up timing
-  this.tfinal = 100 * this.system.timescale;
-  this.secondsPerTimescale = 5;
-  this.fps = 24;
+  /** @member {Number} secondsPerTimescale  how many seconds to animate through one timescale */
+  this._secondsPerTimescale = 6;
+  /** @member {Number} fps how many frames per second to animate. hardwired default 24 */
+  this._fps = 24;
   this.calcDtAnimate();
 
+  /** @member {Number} timeNextAnimate the next drawing time */
   this.timeNextAnimate = this.dtAnimate;
   this.integrator.maxDt = this.dtAnimate;
   
-  this.leaveTrails = true;
+  /** @member {Boolean} leaveTrails draw body trails or not. hardwired default true */
+  this._leaveTrails = true;
 
   this.initialConditionSetupFunctions = {
     "figure 8": this.setFigureEight,
@@ -46,19 +57,26 @@ function Simulation(system) {
   };
 
   // svg stuff
-  this.integrateTimer = null;
+ // this.integrateTimer = null;
   
+  /** @member {Number} w width of the plots */
   this.w = parseInt(d3.select("#spatial-canvas").style("width"), 10);
+  /** @member {Number} h height of the plots */
   this.h = this.w * 0.8;
   
+  /** @member {Object} xSpatial d3 scale for space plot */
   this.xSpatial = d3.scale.linear()
           .range([0, this.w]);
+  /** @member {Object} ySpatial d3 scale for space plot */
   this.ySpatial = d3.scale.linear()
           .range([this.h, 0]);
+  /** @member {Object} xShape d3 scale for shape plot */
   this.xShape = d3.scale.linear()
           .range([0, this.w]);
+  /** @member {Object} yShape d3 scale for shape plot */
   this.yShape = d3.scale.linear()
           .range([this.h, 0]);
+  /** @member {Object} yShapeThermometer d3 scale for shape plot size thermometer */
   this.yShapeThermometer = d3.scale.linear()
           .range([this.h, 0]);
   
@@ -72,12 +90,16 @@ function Simulation(system) {
 }
 
 Simulation.prototype.setSpeed = function(newSpeed) {
-  this.secondsPerTimescale = newSpeed;
+  this._secondsPerTimescale = newSpeed;
   this.calcDtAnimate();
 };
 
+Simulation.prototype.multiplySpeed = function(factor) {
+  this.setSpeed(this._secondsPerTimescale * factor);
+};
+
 Simulation.prototype.calcDtAnimate = function() {
-  this.dtAnimate = this.system.timescale / (this.secondsPerTimescale * this.fps);
+  this.dtAnimate = this.system.timescale / (this._secondsPerTimescale * this._fps);
 };
 
 Simulation.prototype.setPlotSizes = function() {
@@ -175,7 +197,7 @@ Simulation.prototype.initializeShapePlot = function() {
     .attr("cy", y(0))
     .attr("r", x(1) - x(0))
     .attr("class", "shape-circle");
-    
+
   d3.select("#shape-layer").append("circle")
     .datum(shape)
     .attr("cx", function(d) { return x(d.x); })
@@ -299,7 +321,7 @@ Simulation.prototype.transitionShapePoint = function(duration, shapeselection, s
   shapeselection
     .attr("cx", function(d) { return x(d.x); })
     .attr("cy", function(d) { return y(d.y); });
-  if (this.leaveTrails) {
+  if (this._leaveTrails) {
     svg.append("circle")
       .datum(this.system.shape) 
       .attr("cx", function(d) { return x(d.x); })
@@ -328,7 +350,7 @@ Simulation.prototype.transitionBodies = function(duration, bodyselection, svg) {
   bodyselection
     .attr("cx", function(d) { return x(d.pos[0]); })
     .attr("cy", function(d) { return y(d.pos[1]); });
-  if (this.leaveTrails) {
+  if (this._leaveTrails) {
     svg.selectAll("g")
       .data(this.system.bodiesPlot)
     .enter()
@@ -358,32 +380,14 @@ Simulation.prototype.refreshSpatialPlot = function() {
     .attr("cy", function(d) { return y(d.pos[1]); });
 };
 
-Simulation.prototype.transitionBodies2 = function(duration, bodyselection, svg) {
-  var x = this.xSpatial,
-    y = this.ySpatial,
-    fadeTime = 4000;
-    
-  bodyselection.transition()
-    .attr("cx", function(d) { return x(d.pos[0]); })
-    .attr("cy", function(d) { return y(d.pos[1]); })
-    .duration(duration);
-  if (this.leaveTrails) {
-    svg.selectAll("g")
-      .data(this.system.bodiesPlot)
-    .enter()
-      .append("circle")
-      .attr("cx", function(d) { return x(d.pos[0]); })
-      .attr("cy", function(d) { return y(d.pos[1]); })
-      .attr("r", 2)
-      .attr("class", function(d, i) { return "nbody-trail-"+i; })
-    .transition()
-      .duration(fadeTime)
-      .ease(Math.sqrt)
-      .style("opacity", 0)
-    .remove();  
+
+Simulation.prototype.copyBodiesToBodiesPlot = function() {
+  var i;
+  for (i = 0; i < this.system.N; i += 1) {
+    this.system.bodiesPlot[i].pos = this.system.bodies[i].pos.slice(0);
+    //console.log("bodiesPlot ",this.system.bodiesPlot[i].pos);
   }
 };
-
 
 
 
