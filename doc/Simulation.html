@@ -1,0 +1,3968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: Simulation</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Class: Simulation</h1>
+    
+    
+
+
+
+<section>
+    
+<header>
+    <h2>
+    Simulation
+    </h2>
+    
+</header>  
+
+<article>
+    <div class="container-overview">
+    
+    
+    
+        
+<dt>
+    <h4 class="name" id="Simulation"><span class="type-signature"></span>new Simulation<span class="signature">(system)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates an instance of a Simulation.
+  The Simulation is a wrapper for everything we need to display the time evolution;
+  it is in charge of setting up the plots to display the state of the system, it holds a 
+  reference to a <a href="System.html">System</a>, which holds a collection of <a href="Body.html">Body</a>s. It also 
+  instantiates an <a href="IntegratorIAS15.html">IntegratorIAS15</a> to advance the system in time. The driver 
+  script calls the Simulation's methods to control the flow of the animation, including
+  speeding up or slowing down the animation, zooming in and out, selecting and applying
+  initial conditions, and stepping through to each subsequent animation frame.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>system</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="System.html">System</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">the system this simulation is displaying</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line20">line 20</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Members</h3>
+        
+        <dl>
+            
+<dt>
+    <h4 class="name" id="_bodyPoints0"><span class="type-signature"></span>_bodyPoints0<span class="type-signature"> :Number[]</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        storage for previous body0 positions
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Number[]</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line75">line 75</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_bodyPoints1"><span class="type-signature"></span>_bodyPoints1<span class="type-signature"> :Number[]</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        storage for previous body1 positions
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Number[]</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line80">line 80</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_bodyPoints2"><span class="type-signature"></span>_bodyPoints2<span class="type-signature"> :Number[]</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        storage for previous body2 positions
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Number[]</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line85">line 85</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_shapePoints"><span class="type-signature"></span>_shapePoints<span class="type-signature"> :Number[]</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        storage for previous shape positions
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Number[]</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line70">line 70</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="fps"><span class="type-signature"></span>fps<span class="type-signature"> :Number</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        how many frames per second to animate. hardwired default 24
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Number</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line46">line 46</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="h"><span class="type-signature"></span>h<span class="type-signature"> :Number</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        height of the plots; 0.8 times width
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Number</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line113">line 113</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="initialConditoinSetupFunctions"><span class="type-signature"></span>initialConditoinSetupFunctions<span class="type-signature"> :Object[]</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        enrollment array for initial condition generators
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object[]</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line90">line 90</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="integrator"><span class="type-signature"></span>integrator<span class="type-signature"> :<a href="IntegratorIAS15.html">IntegratorIAS15</a></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        the integrator that advances the system
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="IntegratorIAS15.html">IntegratorIAS15</a></span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line33">line 33</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="leaveTrails"><span class="type-signature"></span>leaveTrails<span class="type-signature"> :Boolean</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        draw body trails or not. hardwired default true.
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Boolean</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line60">line 60</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="lineFunctionShape"><span class="type-signature"></span>lineFunctionShape<span class="type-signature"> :Object</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        d3 line function for shape plot trails
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line156">line 156</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="lineFunctionSpace"><span class="type-signature"></span>lineFunctionSpace<span class="type-signature"> :Object</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        d3 line function for space plot trails
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line148">line 148</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="numberTrailPoints"><span class="type-signature"></span>numberTrailPoints<span class="type-signature"> :Boolean</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        how many of the previous positions to use for trail drawing. hardwired default 75.
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Boolean</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line65">line 65</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="secondsPerTimescale"><span class="type-signature"></span>secondsPerTimescale<span class="type-signature"> :Number</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        how many seconds to animate through one timescale
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Number</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line41">line 41</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="timeNextAnimate"><span class="type-signature"></span>timeNextAnimate<span class="type-signature"> :Number</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        the next drawing time
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Number</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line53">line 53</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="w"><span class="type-signature"></span>w<span class="type-signature"> :Number</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        width of the plots
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Number</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line108">line 108</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="xShape"><span class="type-signature"></span>xShape<span class="type-signature"> :Object</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        d3 scale for shape plot
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line130">line 130</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="xSpatial"><span class="type-signature"></span>xSpatial<span class="type-signature"> :Object</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        d3 scale for space plot
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line118">line 118</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="yShape"><span class="type-signature"></span>yShape<span class="type-signature"> :Object</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        d3 scale for shape plot
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line136">line 136</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="yShapeThermometer"><span class="type-signature"></span>yShapeThermometer<span class="type-signature"> :Object</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        d3 scale for shape plot size thermometer
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line142">line 142</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="ySpatial"><span class="type-signature"></span>ySpatial<span class="type-signature"> :Object</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        d3 scale for space plot
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line124">line 124</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl>
+            
+<dt>
+    <h4 class="name" id="activatePresetInitialConditions"><span class="type-signature"></span>activatePresetInitialConditions<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Driver method to update the initial condition form and set the bodies.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation_initial_conditions.js.html">simulation_initial_conditions.js</a>, <a href="simulation_initial_conditions.js.html#line282">line 282</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="applyInitialConditionsForm"><span class="type-signature"></span>applyInitialConditionsForm<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Take values from the initial condition form and apply them to the bodies after 
+  verification of numerical values.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation_initial_conditions.js.html">simulation_initial_conditions.js</a>, <a href="simulation_initial_conditions.js.html#line325">line 325</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="calcDtAnimate"><span class="type-signature"></span>calcDtAnimate<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Set the animation speed in seconds per timescale
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line190">line 190</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="choosePresetInitialConditions"><span class="type-signature"></span>choosePresetInitialConditions<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Driver method to activate the chosen initial condition presets
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation_initial_conditions.js.html">simulation_initial_conditions.js</a>, <a href="simulation_initial_conditions.js.html#line11">line 11</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="clearPathArrays"><span class="type-signature"></span>clearPathArrays<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        clear the trail data arrays when new initial conditions are chosen
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line444">line 444</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="initializeShapePlot"><span class="type-signature"></span>initializeShapePlot<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Set up the SVG points for the shape plots
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line293">line 293</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="initializeSpatialPlot"><span class="type-signature"></span>initializeSpatialPlot<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Set up the SVG points
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line250">line 250</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="initializeSvgLayers"><span class="type-signature"></span>initializeSvgLayers<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Set up the SVG layers for the space and shape plots
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line420">line 420</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="multiplySpeed"><span class="type-signature"></span>multiplySpeed<span class="signature">(factor)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Multiply the current animation speed by a factor
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>factor</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">The multiplier to apply to the animation speed</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line182">line 182</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="populateInitialConditionsForm"><span class="type-signature"></span>populateInitialConditionsForm<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Set the initial conditions in the custom initial conditions form in the DOM.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation_initial_conditions.js.html">simulation_initial_conditions.js</a>, <a href="simulation_initial_conditions.js.html#line306">line 306</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="refreshSpatialPlot"><span class="type-signature"></span>refreshSpatialPlot<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Repaint the space plot when the domain is changed
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line528">line 528</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="resetInitialConditions"><span class="type-signature"></span>resetInitialConditions<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Driver method to set the bodies and reset various timers, energies, etc.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation_initial_conditions.js.html">simulation_initial_conditions.js</a>, <a href="simulation_initial_conditions.js.html#line291">line 291</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setBroukeHenon"><span class="type-signature"></span>setBroukeHenon<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Sets up the Brouke Henon periodic solution.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation_initial_conditions.js.html">simulation_initial_conditions.js</a>, <a href="simulation_initial_conditions.js.html#line46">line 46</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setChenRetrograde"><span class="type-signature"></span>setChenRetrograde<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Sets up Chen's retrograde orbit.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation_initial_conditions.js.html">simulation_initial_conditions.js</a>, <a href="simulation_initial_conditions.js.html#line206">line 206</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setEquilateralStable"><span class="type-signature"></span>setEquilateralStable<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Sets up an equilateral triangle solution with a dominant mass.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation_initial_conditions.js.html">simulation_initial_conditions.js</a>, <a href="simulation_initial_conditions.js.html#line69">line 69</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setEquilateralUnstable"><span class="type-signature"></span>setEquilateralUnstable<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Sets up an equilateral triangle solution with equal masses; unstable
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation_initial_conditions.js.html">simulation_initial_conditions.js</a>, <a href="simulation_initial_conditions.js.html#line97">line 97</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setEscapingPlanet"><span class="type-signature"></span>setEscapingPlanet<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Sets up an equal mass circular binary with a planet that eventually escapes.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation_initial_conditions.js.html">simulation_initial_conditions.js</a>, <a href="simulation_initial_conditions.js.html#line257">line 257</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setFigureEight"><span class="type-signature"></span>setFigureEight<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Sets up the figure 8 periodic solution.
+  See e.g. <a href="http://homepages.math.uic.edu/~jan/mcs320s07/Project_Two/sol_body.html">http://homepages.math.uic.edu/~jan/mcs320s07/Project_Two/sol_body.html</a>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation_initial_conditions.js.html">simulation_initial_conditions.js</a>, <a href="simulation_initial_conditions.js.html#line22">line 22</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setMoth"><span class="type-signature"></span>setMoth<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Sets up Suvakov and Dmitrasinovic moth
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation_initial_conditions.js.html">simulation_initial_conditions.js</a>, <a href="simulation_initial_conditions.js.html#line231">line 231</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setPlotSizes"><span class="type-signature"></span>setPlotSizes<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Set the animation speed in seconds per timescale
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line198">line 198</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setPythagorean"><span class="type-signature"></span>setPythagorean<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Sets up the historic Pythagorean problem.
+  See e.g. <a href="http://www.ucolick.org/~laugh/oxide/projects/burrau.html">http://www.ucolick.org/~laugh/oxide/projects/burrau.html</a>.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation_initial_conditions.js.html">simulation_initial_conditions.js</a>, <a href="simulation_initial_conditions.js.html#line128">line 128</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setSpatialPlotDomain"><span class="type-signature"></span>setSpatialPlotDomain<span class="signature">(newRange)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Adjust the domain of the d3 scales to a new value
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>newRange</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">the desired plot domain</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line234">line 234</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setSpeed"><span class="type-signature"></span>setSpeed<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Set the animation speed in seconds per timescale
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line172">line 172</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setSunJupiterEarth"><span class="type-signature"></span>setSunJupiterEarth<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Sets up a stylized Sun-Jupiter-Earth system.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation_initial_conditions.js.html">simulation_initial_conditions.js</a>, <a href="simulation_initial_conditions.js.html#line154">line 154</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setTransferringPlanet"><span class="type-signature"></span>setTransferringPlanet<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Sets up an equal mass circular binary with a planet that chaotically bounces between 
+  the two stars.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation_initial_conditions.js.html">simulation_initial_conditions.js</a>, <a href="simulation_initial_conditions.js.html#line180">line 180</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="showShapeClues"><span class="type-signature"></span>showShapeClues<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Add shape clues to the shape plot; double collisions, equilateral configurations
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line350">line 350</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="transitionBodies"><span class="type-signature"></span>transitionBodies<span class="signature">(bodyselection)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Move the body points to the next animation frame
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>bodyselection</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">the cached d3 selection of body points</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line496">line 496</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="transitionShapePoint"><span class="type-signature"></span>transitionShapePoint<span class="signature">(shapeselection)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Move the shape point to the next animation frame
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>shapeselection</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">the cached d3 selection of the shape point</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line462">line 462</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="transitionShapePointSize"><span class="type-signature"></span>transitionShapePointSize<span class="signature">(shapeselection)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Move the shape size point to the next animation frame
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>shapeselection</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">the cached d3 selection of the shape size point</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation.js.html">simulation.js</a>, <a href="simulation.js.html#line486">line 486</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="verifyField"><span class="type-signature"></span>verifyField<span class="signature">(field)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Verify that an input field holds a number
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>field</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">the field that we are checking for numericalness</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation_initial_conditions.js.html">simulation_initial_conditions.js</a>, <a href="simulation_initial_conditions.js.html#line397">line 397</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    true if the field is ok; false if it's not numerical
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="verifyInput"><span class="type-signature"></span>verifyInput<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Driver method to check that the initial conditions form holds numbers.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="simulation_initial_conditions.js.html">simulation_initial_conditions.js</a>, <a href="simulation_initial_conditions.js.html#line363">line 363</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    true if all input is ok; false if there's at least one bad input
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+    
+    
+</article>
+
+</section>  
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Body.html">Body</a></li><li><a href="IntegratorIAS15.html">IntegratorIAS15</a></li><li><a href="IntegratorLeapfrog.html">IntegratorLeapfrog</a></li><li><a href="Simulation.html">Simulation</a></li><li><a href="System.html">System</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Mon Dec 15 2014 15:32:19 GMT-0600 (CST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

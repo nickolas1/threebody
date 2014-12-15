@@ -2,10 +2,14 @@
 "use strict";
 
 
-/**
-takes as input a system object
-*/
+/** Creates an instance of IntegratorLeapfrog.
+  The IntegratorLeapfrog advances (in time) a {@link System} 
+  which holds a collection of {@link Body}s.
 
+  @class
+  @deprecated
+  @param {System} system the system this integrator is in charge of integrating in time
+*/
 function IntegratorLeapfrog(system) {
 
   this.sps = 60; /* steps per second */
@@ -30,7 +34,11 @@ function IntegratorLeapfrog(system) {
   });
 }
 
-
+/** Kick the system
+ @memberof IntegratorLeapfrog
+ @instance 
+ @param {Number} dt the time to kick through
+*/ 
 IntegratorLeapfrog.prototype.kick = function(dt) {
   var i, k;
   
@@ -41,6 +49,11 @@ IntegratorLeapfrog.prototype.kick = function(dt) {
   }  
 };
 
+/** Drift the system
+ @memberof IntegratorLeapfrog
+ @instance 
+ @param {Number} dt the time to drift through
+*/ 
 IntegratorLeapfrog.prototype.drift = function(dt) {
   var i, k;
   
@@ -51,7 +64,10 @@ IntegratorLeapfrog.prototype.drift = function(dt) {
   }  
 };
 
-
+/** Kick-Drift-Kick integration step
+ @memberof IntegratorLeapfrog
+ @instance 
+*/ 
 IntegratorLeapfrog.prototype.integrationStep = function() {
   this.kick(this.dtHalf);
   this.drift(this.dt);

@@ -1,4 +1,31 @@
-/*jshint quotmark: double, unused: false  */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: system.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: system.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*jshint quotmark: double, unused: false  */
 "use strict";
 /*global Body*/
 
@@ -81,9 +108,9 @@ System.prototype.calcTimescale = function() {
     
   rMean = 0;
   totalMass = 0;
-  for (i = 0; i < this.N; i += 1) {
+  for (i = 0; i &lt; this.N; i += 1) {
     r2 = 0;
-    for (k = 0; k < 3; k += 1) {
+    for (k = 0; k &lt; 3; k += 1) {
       r2 += this.bodies[i].pos[k] * this.bodies[i].pos[k];
     }
 
@@ -116,7 +143,7 @@ System.prototype.estimateDrawingTime = function(timeNew, timeOld, timeTarget) {
     i, k;
     
   // figure out which of our two available times is closer to the target time
-  if (timeNew - timeTarget <= timeTarget - timeOld) {
+  if (timeNew - timeTarget &lt;= timeTarget - timeOld) {
     dt = timeTarget - timeNew;
     bodies = this.bodies;
   }
@@ -126,8 +153,8 @@ System.prototype.estimateDrawingTime = function(timeNew, timeOld, timeTarget) {
   }
   halfdt2 = 0.5 *  dt * dt;
   
-  for (i = 0; i < this.N; i += 1) {
-    for (k = 0; k < 3; k += 1) {
+  for (i = 0; i &lt; this.N; i += 1) {
+    for (k = 0; k &lt; 3; k += 1) {
       this.bodiesPlot[i].pos[k] = 
         bodies[i].pos[k] + 
         bodies[i].vel[k] * dt + 
@@ -151,7 +178,7 @@ System.prototype.calcTriangleSizeAndShape = function() {
     k;
   
   // since this is just used for plotting, use bodiesPlot  
-  for (k = 0; k < 3; k += 1) {
+  for (k = 0; k &lt; 3; k += 1) {
     dr = this.bodiesPlot[1].pos[k] - this.bodiesPlot[0].pos[k];
     r210 += dr * dr;
     
@@ -189,7 +216,7 @@ System.prototype.moveToCenterOfMomentum = function() {
     });
   
     bodies.forEach(function (v) {
-      for(k = 0; k < 3; k += 1){
+      for(k = 0; k &lt; 3; k += 1){
         cmPos[k] += v.mass * v.pos[k] / totalMass;
         cmVel[k] += v.mass * v.vel[k] / totalMass;
       }
@@ -205,7 +232,7 @@ System.prototype.moveToCenterOfMomentum = function() {
 
   // move to the center of mass
   this.bodies.forEach(function (v, i, a) {
-    for (k = 0; k < 3; k += 1) {
+    for (k = 0; k &lt; 3; k += 1) {
       a[i].pos[k] -= cm.pos[k];
       a[i].vel[k] -= cm.vel[k];
     }
@@ -225,7 +252,7 @@ System.prototype.calcTotalEnergy = function() {
   
     bodies.forEach(function (v) {    
       v2 = 0;
-      for(k = 0; k < 3; k += 1){
+      for(k = 0; k &lt; 3; k += 1){
         v2 = v2 + v.vel[k] * v.vel[k];
       }
       ke += 0.5 * v.mass * v2;
@@ -245,11 +272,11 @@ System.prototype.calcTotalEnergy = function() {
       N = bodies.length,
       i, j, k;
   
-    for (i = 0; i < N - 1; i += 1) {
-      for (j = i + 1; j < N; j += 1) {
+    for (i = 0; i &lt; N - 1; i += 1) {
+      for (j = i + 1; j &lt; N; j += 1) {
         //get the potential contribution from each pair
         r2 = 0;
-        for(k = 0; k < 3; k += 1){
+        for(k = 0; k &lt; 3; k += 1){
           dr[k] = bodies[j].pos[k] - bodies[i].pos[k];
           r2 += dr[k] * dr[k];
         }
@@ -278,7 +305,7 @@ System.prototype.calcAngularMomentum = function() {
     b = this.bodies;
   
   this.angularMomentum = [0, 0, 0];
-  for (i = 0; i < this.N; i += 1) {
+  for (i = 0; i &lt; this.N; i += 1) {
     this.angularMomentum[0] += b[i].mass * (b[i].pos[1] * b[i].vel[2] - b[i].pos[2] * b[i].vel[1]);
     this.angularMomentum[1] += b[i].mass * (b[i].pos[2] * b[i].vel[0] - b[i].pos[0] * b[i].vel[2]);
     this.angularMomentum[2] += b[i].mass * (b[i].pos[0] * b[i].vel[1] - b[i].pos[1] * b[i].vel[0]);
@@ -291,7 +318,7 @@ System.prototype.calcAngularMomentum = function() {
 */
 System.prototype.copyBodiesToBodiesLast = function() {
   var i;
-  for (i = 0; i < this.N; i += 1) {
+  for (i = 0; i &lt; this.N; i += 1) {
     this.bodiesLast[i].pos = this.bodies[i].pos.slice(0);
     this.bodiesLast[i].vel = this.bodies[i].vel.slice(0);
     this.bodiesLast[i].acc = this.bodies[i].acc.slice(0);
@@ -315,14 +342,14 @@ System.prototype.calcAccels = function() {
       bodiesj;
   
   // reset accels to 0
-  for (i = 0; i < this.N; i += 1) {
+  for (i = 0; i &lt; this.N; i += 1) {
     this.bodies[i].acc = [0, 0, 0];
   }   
   
   // add pairwise force to each body
-  for (i = 0; i < this.N - 1; i += 1) {
+  for (i = 0; i &lt; this.N - 1; i += 1) {
     bodiesi = this.bodies[i];
-    for (j = i + 1; j < this.N; j += 1) {    
+    for (j = i + 1; j &lt; this.N; j += 1) {    
     bodiesj = this.bodies[j];
       dr = [
           bodiesj.pos[0] - bodiesi.pos[0],
@@ -344,3 +371,26 @@ System.prototype.calcAccels = function() {
   }
 };
 
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Body.html">Body</a></li><li><a href="IntegratorIAS15.html">IntegratorIAS15</a></li><li><a href="IntegratorLeapfrog.html">IntegratorLeapfrog</a></li><li><a href="Simulation.html">Simulation</a></li><li><a href="System.html">System</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Mon Dec 15 2014 15:32:19 GMT-0600 (CST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

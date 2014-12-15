@@ -1,4 +1,31 @@
-/*jshint quotmark: double, unused: false*/
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: integrator_ias15.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: integrator_ias15.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*jshint quotmark: double, unused: false*/
 "use strict";
 
 
@@ -200,7 +227,7 @@ IntegratorIAS15.prototype.integrationStep = function() {
     }
     
     // set floor
-    if (dtNew < this.minDt) {
+    if (dtNew &lt; this.minDt) {
       dtNew = this.minDt;
     }
     
@@ -210,7 +237,7 @@ IntegratorIAS15.prototype.integrationStep = function() {
     //  dtNew = this.maxDt;
     //}
     
-    if (Math.abs(dtNew / dtLast) < this.safetyFactor) {
+    if (Math.abs(dtNew / dtLast) &lt; this.safetyFactor) {
     //new timestep is a lot smaller than the last one
       this.copyPosVelToBodies();
       this.dt = dtNew;
@@ -262,12 +289,12 @@ IntegratorIAS15.prototype.gaussRadauStepthroughInterval = function(stepTimeStart
     i, k, n; 
   
 // step through time interval using Gauss Radau steps
-  for (n = 1; n < 8; n += 1) {
+  for (n = 1; n &lt; 8; n += 1) {
     this.predictGaussRadauPositions(n);
   
     // calculate accelerations and copy to acc1
     this.system.calcAccels();
-    for (i = 0; i < this.N; i += 1) {
+    for (i = 0; i &lt; this.N; i += 1) {
       this.acc1[3*i] = this.system.bodies[i].acc[0];
       this.acc1[3*i + 1] = this.system.bodies[i].acc[1];
       this.acc1[3*i + 2] = this.system.bodies[i].acc[2];
@@ -275,7 +302,7 @@ IntegratorIAS15.prototype.gaussRadauStepthroughInterval = function(stepTimeStart
           
     switch (n) {
       case 1:
-        for (k = 0; k < this.N3; k += 1) {
+        for (k = 0; k &lt; this.N3; k += 1) {
           tmp = this.g[0][k];
           gk = this.acc1[k] - this.acc0[k];
           this.g[0][k]  = gk / this._r[0];
@@ -285,7 +312,7 @@ IntegratorIAS15.prototype.gaussRadauStepthroughInterval = function(stepTimeStart
         break;
         
       case 2:
-        for (k = 0; k < this.N3; k += 1) {
+        for (k = 0; k &lt; this.N3; k += 1) {
           tmp = this.g[1][k];
           gk = this.acc1[k] - this.acc0[k];
           this.g[1][k] = (gk/this._r[1] - this.g[0][k])/this._r[2];
@@ -296,7 +323,7 @@ IntegratorIAS15.prototype.gaussRadauStepthroughInterval = function(stepTimeStart
         break;
         
       case 3:
-        for (k = 0; k < this.N3; k += 1) {
+        for (k = 0; k &lt; this.N3; k += 1) {
           tmp = this.g[2][k];
           gk = this.acc1[k] - this.acc0[k];
           this.g[2][k] = ((gk/this._r[3] - this.g[0][k])/this._r[4] - 
@@ -309,7 +336,7 @@ IntegratorIAS15.prototype.gaussRadauStepthroughInterval = function(stepTimeStart
         break;
         
       case 4:
-        for (k = 0; k < this.N3; k += 1) {
+        for (k = 0; k &lt; this.N3; k += 1) {
           tmp = this.g[3][k];
           gk = this.acc1[k] - this.acc0[k];
           this.g[3][k] = (((gk/this._r[6] - this.g[0][k])/this._r[7] - 
@@ -323,7 +350,7 @@ IntegratorIAS15.prototype.gaussRadauStepthroughInterval = function(stepTimeStart
         break;
         
       case 5:
-        for (k = 0; k < this.N3; k += 1) {
+        for (k = 0; k &lt; this.N3; k += 1) {
           tmp = this.g[4][k];
           gk = this.acc1[k] - this.acc0[k];
           this.g[4][k] = ((((gk/this._r[10] - this.g[0][k])/this._r[11] - 
@@ -339,7 +366,7 @@ IntegratorIAS15.prototype.gaussRadauStepthroughInterval = function(stepTimeStart
         break;
         
       case 6:
-        for (k = 0; k < this.N3; k += 1) {
+        for (k = 0; k &lt; this.N3; k += 1) {
           tmp = this.g[5][k];
           gk = this.acc1[k] - this.acc0[k];
           this.g[5][k] = (((((gk/this._r[15] - this.g[0][k])/this._r[16] - 
@@ -358,7 +385,7 @@ IntegratorIAS15.prototype.gaussRadauStepthroughInterval = function(stepTimeStart
       case 7:
         maxak = 0;
         maxb6ktmp = 0;
-        for (k = 0; k < this.N3; k += 1) {
+        for (k = 0; k &lt; this.N3; k += 1) {
           tmp = this.g[6][k];
           gk = this.acc1[k] - this.acc0[k];
           this.g[6][k] = ((((((gk/this._r[21] - this.g[0][k])/this._r[22] - 
@@ -414,8 +441,8 @@ IntegratorIAS15.prototype.predictGaussRadauPositions = function(n) {
   s[8] = 7 * s[7] * this._hGR[n] / 9;
 
   // predict body positions to substep n
-  for (i = 0; i < this.N; i += 1) {
-    for (k = 3*i; k < 3*i + 3; k += 1) {
+  for (i = 0; i &lt; this.N; i += 1) {
+    for (k = 3*i; k &lt; 3*i + 3; k += 1) {
       xk = this.cspos[k] + (s[8]*this.b[6][k] + s[7]*this.b[5][k] + s[6]*this.b[4][k] + 
         s[5]*this.b[3][k] + s[4]*this.b[2][k] + s[3]*this.b[1][k] + 
         s[2]*this.b[0][k] + s[1]*this.acc0[k] + s[0]*this.vel0[k]);
@@ -449,7 +476,7 @@ IntegratorIAS15.prototype.predictNextBAndE = function(ratio) {
     be5,
     be6;
 
-  for (k = 0; k < this.N3; k += 1) {
+  for (k = 0; k &lt; this.N3; k += 1) {
     be0 = this.bReset[0][k] - this.eReset[0][k];
     be1 = this.bReset[1][k] - this.eReset[1][k];
     be2 = this.bReset[2][k] - this.eReset[2][k];
@@ -511,7 +538,7 @@ IntegratorIAS15.prototype.finalizePosVel = function(dtLast) {
     k,
     tmp;
   
-  for (k = 0; k < this.N3; k += 1) {
+  for (k = 0; k &lt; this.N3; k += 1) {
     tmp = this.pos0[k];
     this.cspos[k] += (this.b[6][k]/72 + this.b[5][k]/56 + this.b[4][k]/42 + 
       this.b[3][k]/30 + this.b[2][k]/20 + this.b[1][k]/12 + this.b[0][k]/6 + 
@@ -534,7 +561,7 @@ IntegratorIAS15.prototype.finalizePosVel = function(dtLast) {
 */
 IntegratorIAS15.prototype.copyPosVelToBodies = function() {
   var i;
-  for (i = 0; i < this.N; i += 1) {
+  for (i = 0; i &lt; this.N; i += 1) {
     this.system.bodies[i].pos = this.pos0.slice(3*i, 3*i + 3);
     this.system.bodies[i].vel = this.vel0.slice(3*i, 3*i + 3);
   }
@@ -555,10 +582,10 @@ IntegratorIAS15.prototype.getIntegratorError = function() {
     v2,
     r2;
     
-  for (i = 0; i < this.N; i += 1) {
+  for (i = 0; i &lt; this.N; i += 1) {
     v2 = 0;
     r2 = 0;
-    for (k = 0; k < 3; k += 1) {
+    for (k = 0; k &lt; 3; k += 1) {
       r2 += this.system.bodies[i].pos[k] * this.system.bodies[i].pos[k];
       v2 += this.system.bodies[i].vel[k] * this.system.bodies[i].vel[k];
     }
@@ -568,7 +595,7 @@ IntegratorIAS15.prototype.getIntegratorError = function() {
       //maxak = Math.max.apply(null, this.acc1.slice(3*i, 3*i + 3).map(Math.abs));
       //maxb6k = Math.max.apply(null, this.b[6].slice(3*i, 3*i + 3).map(Math.abs));
       // above looks nicer, below is way faster
-      for (k = 3*i; k < 3*i + 3; k += 1) {
+      for (k = 3*i; k &lt; 3*i + 3; k += 1) {
         ak = Math.abs(this.acc1[k]);
         if (ak) {
           maxak = Math.max(ak, maxak);
@@ -594,9 +621,9 @@ IntegratorIAS15.prototype.getIntegratorError = function() {
 */
 IntegratorIAS15.prototype.checkPredCorrBreaks = function(iterations, error, errorLast) {
   //console.log("pred corr errs: ",iterations, error, errorLast);
-  if (error < 1e-16) {
+  if (error &lt; 1e-16) {
     return true;
-  } else if (iterations > 2 && errorLast <= error) {
+  } else if (iterations > 2 && errorLast &lt;= error) {
     return true;
   } else if (iterations >= 12) {
     return true;
@@ -613,7 +640,7 @@ IntegratorIAS15.prototype.checkPredCorrBreaks = function(iterations, error, erro
 IntegratorIAS15.prototype.copyBodiesToPosVelAcc = function() {
   var i;
   // store initial positions, velocities, accelerations in 1D array
-  for (i = 0; i < this.N; i += 1) {
+  for (i = 0; i &lt; this.N; i += 1) {
     this.pos0[3*i] = this.system.bodies[i].pos[0];
     this.pos0[3*i + 1] = this.system.bodies[i].pos[1];
     this.pos0[3*i + 2] = this.system.bodies[i].pos[2];
@@ -634,7 +661,7 @@ IntegratorIAS15.prototype.copyBodiesToPosVelAcc = function() {
 */
 IntegratorIAS15.prototype.setGArray = function() {
   var i; 
-  for (i = 0; i < this.N3; i += 1) {
+  for (i = 0; i &lt; this.N3; i += 1) {
     this.g[0][i] = this.b[6][i]*this._d[15] + this.b[5][i]*this._d[10] + 
       this.b[4][i]*this._d[6] + this.b[3][i]*this._d[3] + this.b[2][i]*this._d[1] + 
         this.b[1][i]*this._d[0] + this.b[0][i];
@@ -658,8 +685,8 @@ IntegratorIAS15.prototype.setGArray = function() {
 IntegratorIAS15.prototype.initializeZeroArrays = function() {
   var i, k;
   
-  for (i = 0; i < 7; i += 1) {
-    for (k = 0; k < this.N3; k += 1) {
+  for (i = 0; i &lt; 7; i += 1) {
+    for (k = 0; k &lt; this.N3; k += 1) {
       this.b[i][k] = 0;
       this.e[i][k] = 0;
       this.bReset[i][k] = 0;
@@ -713,3 +740,26 @@ IntegratorIAS15.prototype.setConstants = function() {
 };
 
 
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Body.html">Body</a></li><li><a href="IntegratorIAS15.html">IntegratorIAS15</a></li><li><a href="IntegratorLeapfrog.html">IntegratorLeapfrog</a></li><li><a href="Simulation.html">Simulation</a></li><li><a href="System.html">System</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Mon Dec 15 2014 15:32:19 GMT-0600 (CST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

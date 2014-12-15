@@ -23,8 +23,8 @@ $(function() {
   var bodySelection = d3.selectAll(".nbody");
   var shapeSelection = d3.selectAll(".shape-point");
   var shapeSizeSelection = d3.selectAll(".shape-point-size");
-  var bodySvg = d3.select("#bodies-trail-layer");
-  var shapeSvg = d3.select("#shape-layer");
+  /* bodySvg = d3.select("#bodies-trail-layer");
+  var shapeSvg = d3.select("#shape-layer");*/
   
   
   simulation.populateInitialConditionsForm();
@@ -36,9 +36,9 @@ $(function() {
     system.estimateDrawingTime(simulation.integrator.time, 
       simulation.integrator.time - simulation.integrator.lastSuccessfulDt, 
       simulation.timeNextAnimate);
-    simulation.transitionBodies(10, bodySelection, bodySvg);
-    simulation.transitionShapePoint(10, shapeSelection, shapeSvg);
-    simulation.transitionShapePointSize(10, shapeSizeSelection);
+    simulation.transitionBodies(bodySelection);
+    simulation.transitionShapePoint(shapeSelection);
+    simulation.transitionShapePointSize(shapeSizeSelection);
     system.calcTriangleSizeAndShape();
 
     simulation.timeNextAnimate += simulation.dtAnimate;
@@ -68,7 +68,6 @@ $(function() {
   // initial condition buttons
   $("#ic-apply-button").click( function() {simulation.applyInitialConditionsForm();} );
   $("#preset-ic-selector").change( function() {
-    console.log(this.value);
     simulation.choosePresetInitialConditions(this.value);
   });
   
