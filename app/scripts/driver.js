@@ -14,7 +14,7 @@ $(function() {
   simulation.initializeSpatialPlot();
   simulation.initializeShapePlot();
   simulation.showShapeClues();
-  simulation.choosePresetInitialConditions("figure 8");
+  simulation.choosePresetInitialConditions("figure-8");
   
   var bodySelection = d3.selectAll(".nbody");
   var shapeSelection = d3.selectAll(".shape-point");

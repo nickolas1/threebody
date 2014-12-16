@@ -91,16 +91,16 @@ function Simulation(system) {
     @memberof Simulation#
     @member {Object[]} initialConditoinSetupFunctions */
   this.initialConditionSetupFunctions = {
-    "figure 8": this.setFigureEight,
-    "equilateral, equal masses": this.setEquilateralUnstable,
-    "equilateral, star-planet-planet": this.setEquilateralStable,
-    "Pythagorean": this.setPythagorean,
-    "Brouke-H\u00E9non": this.setBroukeHenon,
-    "Sun, Jupiter, Earth": this.setSunJupiterEarth,
-    "Binary star, transferring planet": this.setTransferringPlanet,
-    "Binary star, escaping planet": this.setEscapingPlanet,
-    "Chen retrograde orbit": this.setChenRetrograde,
-    "\u0160uvakov-Dmitra\u0161inovi\u0107 moth": this.setMoth
+    "figure-8": this.setFigureEight,
+    "equilateral-equal-masses": this.setEquilateralUnstable,
+    "equilateral-star-planet-planet": this.setEquilateralStable,
+    "pythagorean": this.setPythagorean,
+    "brouke-henon": this.setBroukeHenon,
+    "sun-jupiter-earth": this.setSunJupiterEarth,
+    "binary-star-transferring-planet": this.setTransferringPlanet,
+    "binary-star-escaping-planet": this.setEscapingPlanet,
+    "chen-retrograde-orbit": this.setChenRetrograde,
+    "suvakov-dmitrasinovic-moth": this.setMoth
   };
 
 
